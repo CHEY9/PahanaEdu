@@ -1,4 +1,4 @@
-package com.example.pahanaedu2;
+package com.example.pahanaedu2.auth;
 
 import java.io.*;
 
