@@ -12,7 +12,7 @@
     <title>Admin Dashboard</title>
 </head>
 <body>
-<h1>Welcome Admin: <%= user.getUsername() %></h1>
+<h1>Welcome, Admin: <%= user.getUsername() %></h1>
 <p>This is the admin dashboard. You can manage staff, view reports, and more.</p>
 </body>
 </html>

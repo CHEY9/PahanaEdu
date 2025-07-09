@@ -89,13 +89,13 @@
         const password = document.querySelector("input[name='password']").value;
 
         if (username.length < 4 || !/^[a-zA-Z0-9._-]+$/.test(username)) {
-            alert("Username must be 4–20 characters and contain only letters, numbers, '.', '-', '_'.");
+            alert("Username must be 4–10 characters and contain only letters, numbers, '.', '-', '_'.");
             e.preventDefault();
             return;
         }
 
-        if (password.length < 6 || password.includes(" ")) {
-            alert("Password must be at least 6 characters long and cannot contain spaces.");
+        if (password.length < 5 || password.includes(" ")) {
+            alert("Password must be at least 5 characters long and cannot contain spaces.");
             e.preventDefault();
         }
     });

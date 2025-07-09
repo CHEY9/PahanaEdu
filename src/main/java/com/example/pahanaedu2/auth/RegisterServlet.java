@@ -26,12 +26,12 @@ public class RegisterServlet extends HttpServlet {
             throws ServletException, IOException {
 
         // Read form data
-        String username = request.getParameter("username");
-        String password = request.getParameter("password");
-        String confirmPassword = request.getParameter("confirmPassword");
-        String email = request.getParameter("email");
-        String phone = request.getParameter("phone");
-        String role = request.getParameter("role");
+        String username = request.getParameter("username").trim();
+        String password = request.getParameter("password").trim();
+        String confirmPassword = request.getParameter("confirmPassword").trim();
+        String email = request.getParameter("email").trim();
+        String phone = request.getParameter("phone").trim();
+        String role = request.getParameter("role").trim();
 
         // Validate input
         StringBuilder errorMsg = new StringBuilder();

@@ -50,7 +50,7 @@
             const email = document.forms["registerForm"]["email"].value;
             const phone = document.forms["registerForm"]["phone"].value;
 
-            const usernamePattern = /^[a-zA-Z]{5,10}$/;
+            const usernamePattern = /^[a-zA-Z0-9._-]{5,10}$/;
             const passwordPattern = /^(?=.*[0-9])(?=.*[A-Z])(?=.*[a-z])(?=.*[@#$%^&.+=!]).{5,10}$/;
             const emailPattern = /^[\w.-]+@[\w.-]+\.\w{2,}$/;
             const phonePattern = /^\d{10}$/;
