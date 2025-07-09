@@ -14,7 +14,7 @@ public class RegisterServlet extends HttpServlet {
     // Validation patterns
     private static final Pattern USERNAME_PATTERN = Pattern.compile("^[a-zA-Z0-9._-]{5,10}$");
     private static final Pattern PASSWORD_PATTERN = Pattern.compile(
-            "^(?=.*[a-z])(?=.*[0-9])(?=.*[A-Z])(?=.*[@#$%^&+=!]).{5,10}$"
+            "^(?=.*[a-z])(?=.*[0-9])(?=.*[A-Z])(?=.*[@#$%^.&+=!]).{5,10}$"
     );
     private static final Pattern EMAIL_PATTERN = Pattern.compile(
             "^[A-Za-z0-9+_.-]+@[A-Za-z.-]+$"
