@@ -8,6 +8,7 @@ public class CustomerRegistration {
 
     // Stores registered customers: username -> Customer object
     private Map<String, Customer> customerMap = new HashMap<>();
+    private int nextId = 1;  // For auto-incrementing customer IDs
 
     public boolean registerCustomer(Scanner scanner) {
         System.out.print("Enter Username: ");
@@ -23,6 +24,7 @@ public class CustomerRegistration {
             return false;
         }
 
+        // Optional: You can remove this password if it's not necessary for customers here
         System.out.print("Enter Password (min 6 characters): ");
         String password = scanner.nextLine().trim();
         if (password.length() < 6) {
@@ -34,6 +36,13 @@ public class CustomerRegistration {
         String name = scanner.nextLine().trim();
         if (name.isEmpty()) {
             System.out.println("Name cannot be empty.");
+            return false;
+        }
+
+        System.out.print("Enter Email: ");
+        String email = scanner.nextLine().trim();
+        if (email.isEmpty() || !email.matches("^[\\w.-]+@[\\w.-]+\\.\\w{2,}$")) {
+            System.out.println("Invalid or empty email.");
             return false;
         }
 
@@ -51,14 +60,20 @@ public class CustomerRegistration {
             return false;
         }
 
-        Customer newCustomer = new Customer(username, password, name, address, phone);
+        // Assign auto-incremented id
+        int id = nextId++;
+
+        // Create new Customer object with collected info
+        Customer newCustomer = new Customer(id, name, email, phone, address);
+
+        // Store in map with username as key
         customerMap.put(username, newCustomer);
 
         System.out.println("Registration successful!");
         return true;
     }
 
-    // This is for future login class to access registered customers
+    // For accessing registered customers map externally
     public Map<String, Customer> getCustomerMap() {
         return customerMap;
     }

@@ -55,9 +55,9 @@ public class LoginServlet extends HttpServlet {
 
             // Redirect based on role
             if ("admin".equalsIgnoreCase(user.getRole())) {
-                response.sendRedirect("admin/dashboard.jsp");
+                response.sendRedirect("Admin/dashboard.jsp");
             } else if ("staff".equalsIgnoreCase(user.getRole())) {
-                response.sendRedirect("staff/dashboard.jsp");
+                response.sendRedirect("Staff/dashboard.jsp");
             } else {
                 request.setAttribute("errorMessage", "Unknown role. Contact administrator.");
                 request.getRequestDispatcher("/login.jsp").forward(request, response);

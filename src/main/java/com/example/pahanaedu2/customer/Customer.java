@@ -1,47 +1,70 @@
 package com.example.pahanaedu2.customer;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Scanner;
 
 public class Customer {
-    private String username;
-    private String password;
-    private String name;
-    private String address;
-    private String phone;
+        // no-arg constructor
+        private int id;
+        private String name;
+        private String email;
+        private String phone;
+        private String address;
 
-    public Customer(String username, String password, String name, String address, String phone) {
-        this.username = username;
-        this.password = password;
-        this.name = name;
-        this.address = address;
-        this.phone = phone;
+        public Customer(int id, String name, String email, String phone, String address) {
+            this.id = id;
+            this.name = name;
+            this.email = email;
+            this.phone = phone;
+            this.address = address;
+        }
+    // Stores registered customers: email -> Customer object
+    private Map<String, Customer> customerMap = new HashMap<>();
+    private int nextId = 1; // to simulate auto-incrementing ID
+
+    public boolean registerCustomer(Scanner scanner) {
+        System.out.print("Enter Name: ");
+        String name = scanner.nextLine().trim();
+        if (name.isEmpty()) {
+            System.out.println("Name cannot be empty.");
+            return false;
+        }
+
+        System.out.print("Enter Email: ");
+        String email = scanner.nextLine().trim();
+        if (email.isEmpty() || !email.matches("^[\\w.-]+@[\\w.-]+\\.\\w{2,}$")) {
+            System.out.println("Invalid or empty email.");
+            return false;
+        }
+
+        if (customerMap.containsKey(email)) {
+            System.out.println("A customer with this email already exists.");
+            return false;
+        }
+
+        System.out.print("Enter Address: ");
+        String address = scanner.nextLine().trim();
+        if (address.isEmpty()) {
+            System.out.println("Address cannot be empty.");
+            return false;
+        }
+
+        System.out.print("Enter Phone (10 digits): ");
+        String phone = scanner.nextLine().trim();
+        if (!phone.matches("\\d{10}")) {
+            System.out.println("Invalid phone number. Must be 10 digits.");
+            return false;
+        }
+
+        // Create and store new customer
+        Customer newCustomer = new Customer(nextId++, name, email, phone, address);
+        customerMap.put(email, newCustomer);
+
+        System.out.println("Registration successful!");
+        return true;
     }
 
-    public String getUsername() {
-        return username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    @Override
-    public String toString() {
-        return "Customer{" +
-                "username='" + username + '\'' +
-                ", name='" + name + '\'' +
-                ", address='" + address + '\'' +
-                ", phone='" + phone + '\'' +
-                '}';
+    public Map<String, Customer> getCustomerMap() {
+        return customerMap;
     }
 }
