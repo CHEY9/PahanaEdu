@@ -25,6 +25,6 @@ public class AdminDashboardServlet extends HttpServlet {
         // You can add dashboard data here, e.g. stats
         // request.setAttribute("userCount", someService.getUserCount());
 
-        request.getRequestDispatcher("/WEB-INF/Admin/dashboard.jsp").forward(request, response);
+        request.getRequestDispatcher("/Admin/dashboard.jsp").forward(request, response);
     }
 }

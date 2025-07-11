@@ -11,7 +11,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@WebServlet("/admin/manage-users")
+@WebServlet("/Admin/manage-users")
 public class ManageUsersServlet extends HttpServlet {
 
     @Override
@@ -25,7 +25,6 @@ public class ManageUsersServlet extends HttpServlet {
             response.sendRedirect(request.getContextPath() + "/login.jsp");
             return;
         }
-
         List<User> users = new ArrayList<>();
 
         String sql = "SELECT id, username, email, phone, role FROM Users";
@@ -51,6 +50,6 @@ public class ManageUsersServlet extends HttpServlet {
         }
 
         request.setAttribute("users", users);
-        request.getRequestDispatcher("/WEB-INF/Admin/manage-users.jsp").forward(request, response);
+        request.getRequestDispatcher("/Admin/manage-users.jsp").forward(request, response);
     }
 }

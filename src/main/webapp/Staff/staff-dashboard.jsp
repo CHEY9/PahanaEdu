@@ -4,8 +4,8 @@
 
 <%
     User user = (session != null) ? (User) session.getAttribute("user") : null;
-    if (user == null || !"admin".equalsIgnoreCase(user.getRole())) {
-        response.sendRedirect("login.jsp");
+    if (user == null || !"staff".equalsIgnoreCase(user.getRole())) {
+        response.sendRedirect("../login.jsp");
         return;
     }
 %>
@@ -14,18 +14,17 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
-    <title>Admin Dashboard</title>
+    <title>Staff Dashboard</title>
     <link
             href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
             rel="stylesheet"
-            integrity="sha384-..."
             crossorigin="anonymous"
     />
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container">
-        <a class="navbar-brand" href="#">PahanaEdu Admin</a>
+        <a class="navbar-brand" href="#">PahanaEdu Staff</a>
         <div class="collapse navbar-collapse">
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item">
@@ -44,41 +43,25 @@
 </nav>
 
 <div class="container mt-5">
-    <h1 class="mb-4">Admin Dashboard</h1>
-    <p class="lead">Use the options below to manage the system.</p>
+    <h1 class="mb-4">Staff Dashboard</h1>
+    <p class="lead">Use the options below to manage bills and customers.</p>
 
     <div class="row g-4">
         <div class="col-sm-6 col-md-4">
-            <a href="<%= request.getContextPath() %>/Admin/manage-users" class="btn btn-primary w-100 py-3 fs-5">
-                Manage Users
+            <a href="<%= request.getContextPath() %>/Staff/create-bill" class="btn btn-primary w-100 py-3 fs-5">
+                Create New Bill
             </a>
         </div>
         <div class="col-sm-6 col-md-4">
-            <a href="<%= request.getContextPath() %>/Admin/manage-customers.jsp" class="btn btn-warning w-100 py-3 fs-5">
+            <a href="<%= request.getContextPath() %>/Staff/view-bills" class="btn btn-success w-100 py-3 fs-5">
+                View All Bills
+            </a>
+        </div>
+        <div class="col-sm-6 col-md-4">
+            <a href="<%= request.getContextPath() %>/Staff/manage-customers" class="btn btn-warning w-100 py-3 fs-5">
                 Manage Customers
             </a>
         </div>
-        <div class="col-sm-6 col-md-4">
-            <a href="<%= request.getContextPath() %>/Admin/manage-items.jsp" class="btn btn-success w-100 py-3 fs-5">
-                Manage Items
-            </a>
-        </div>
-        <div class="col-sm-6 col-md-4">
-            <a href="<%= request.getContextPath() %>/Admin/manage-bills.jsp" class="btn btn-secondary w-100 py-3 fs-5">
-                View Bills
-            </a>
-        </div>
-        <div class="col-sm-6 col-md-4">
-            <a href="<%= request.getContextPath() %>/Admin/audit-logs.jsp" class="btn btn-dark w-100 py-3 fs-5">
-                Audit Logs
-            </a>
-        </div>
-        <div class="col-sm-6 col-md-4">
-            <a href="<%= request.getContextPath() %>/Admin/view-reports.jsp" class="btn btn-info w-100 py-3 fs-5">
-                View Reports
-            </a>
-        </div>
-
     </div>
 </div>
 
