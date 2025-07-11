@@ -29,7 +29,7 @@ public class AddUserServlet extends HttpServlet {
 
             // Set prepared statement parameters
             stmt.setString(1, username);
-            stmt.setString(2, password); // TODO: Hash passwords for production use!
+            stmt.setString(2, password);
             stmt.setString(3, email);
             stmt.setString(4, phone);
             stmt.setString(5, role);
