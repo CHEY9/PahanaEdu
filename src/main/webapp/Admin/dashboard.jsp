@@ -54,7 +54,7 @@
             </a>
         </div>
         <div class="col-sm-6 col-md-4">
-            <a href="<%= request.getContextPath() %>/Admin/manage-customers.jsp" class="btn btn-warning w-100 py-3 fs-5">
+            <a href="<%= request.getContextPath() %>/Admin/manage-customers" class="btn btn-warning w-100 py-3 fs-5">
                 Manage Customers
             </a>
         </div>
