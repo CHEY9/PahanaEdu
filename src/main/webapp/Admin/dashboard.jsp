@@ -59,7 +59,7 @@
             </a>
         </div>
         <div class="col-sm-6 col-md-4">
-            <a href="<%= request.getContextPath() %>/Admin/manage-items.jsp" class="btn btn-success w-100 py-3 fs-5">
+            <a href="${pageContext.request.contextPath}/Admin/manage-items" class="btn btn-outline-primary w-100 py-3 fs-5">
                 Manage Items
             </a>
         </div>
