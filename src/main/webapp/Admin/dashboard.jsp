@@ -64,12 +64,13 @@
             </a>
         </div>
         <div class="col-sm-6 col-md-4">
-            <a href="<%= request.getContextPath() %>/Admin/manage-bills.jsp" class="btn btn-secondary w-100 py-3 fs-5">
+            <a href="${pageContext.request.contextPath}/view-bills" class="btn btn-secondary w-100 py-3 fs-5">
                 View Bills
             </a>
+
         </div>
         <div class="col-sm-6 col-md-4">
-            <a href="<%= request.getContextPath() %>/Admin/audit-logs.jsp" class="btn btn-dark w-100 py-3 fs-5">
+            <a href="${pageContext.request.contextPath}/Admin/view-audit-logs" class="btn btn-dark w-100 py-3 fs-5">
                 Audit Logs
             </a>
         </div>

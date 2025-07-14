@@ -4,6 +4,7 @@ import com.example.pahanaedu2.db.DBConnection;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
+import com.example.pahanaedu2.audit.AuditLogDAO;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -31,6 +32,12 @@ public class DeleteCustomerServlet extends HttpServlet {
 
             stmt.setInt(1, id);
             stmt.executeUpdate();
+            HttpSession session = request.getSession();
+            int userId = (int) session.getAttribute("userId");
+
+            AuditLogDAO logDAO = new AuditLogDAO();
+            logDAO.logAction(userId, "Delete Customer", "Deleted customer ID: " + id);
+
 
         } catch (SQLException e) {
             e.printStackTrace();

@@ -5,6 +5,9 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import com.example.pahanaedu2.audit.AuditLogDAO;
+import jakarta.servlet.http.HttpSession;
+
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -94,6 +97,12 @@ public class ManageItemsServlet extends HttpServlet {
 
         itemDAO.insertItem(newItem);
         response.sendRedirect(request.getContextPath() + "/Admin/manage-items");
+        HttpSession session = request.getSession();
+        int userId = (int) session.getAttribute("userId");  // set at login
+
+        AuditLogDAO logDAO = new AuditLogDAO();
+        logDAO.logAction(userId, "Add Item", "Added item: " + ItemName + ", Category: " + category);
+
     }
 
     private void updateItem(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException {
@@ -107,12 +116,23 @@ public class ManageItemsServlet extends HttpServlet {
         Item item = new Item(id, ItemName, category, description, price, stock);
         itemDAO.updateItem(item);
         response.sendRedirect(request.getContextPath() + "/Admin/manage-items");
+        HttpSession session = request.getSession();
+        int userId = (int) session.getAttribute("userId");
+
+        AuditLogDAO logDAO = new AuditLogDAO();
+        logDAO.logAction(userId, "Update Item", "Updated item ID: " + id);
+
     }
 
     private void deleteItem(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException {
         int id = Integer.parseInt(request.getParameter("id"));
         itemDAO.deleteItem(id);
         response.sendRedirect(request.getContextPath() + "/Admin/manage-items");
+        HttpSession session = request.getSession();
+        int userId = (int) session.getAttribute("userId"); // Get user ID from session (or however you store logged-in admin ID)
+        AuditLogDAO logDAO = new AuditLogDAO();
+        logDAO.logAction(userId, "Delete Item", "Deleted item with ID: " + id);
+
     }
 
     private void searchItems(HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException {
