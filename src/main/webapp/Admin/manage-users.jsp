@@ -44,9 +44,10 @@
             <td><%= u.getPhone() %></td>
             <td><%= u.getRole() %></td>
             <td>
-                <a href="edit-user.jsp?id=<%= u.getId() %>" class="btn btn-primary btn-sm">Edit</a>
-                <a href="delete-user?id=<%= u.getId() %>" class="btn btn-danger btn-sm"
-                   onclick="return confirm('Are you sure to delete this user?');">Delete</a>
+                <a href="<%= request.getContextPath() %>/Admin/edit-user?id=<%= u.getId() %>" class="btn btn-primary btn-sm">Edit</a>
+
+                <a href="<%= request.getContextPath() %>/Admin/delete-user?id=<%= u.getId() %>" class="btn btn-danger btn-sm"
+                   onclick="return confirm('Are you sure you want to delete this user?');">Delete</a>
             </td>
         </tr>
         <% }
