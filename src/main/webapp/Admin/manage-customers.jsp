@@ -2,7 +2,7 @@
 <%@ page import="java.util.List" %>
 <%@ page import="com.example.pahanaedu2.customer.Customer" %>
 <%
-    List<Customer> customers = (List<Customer>) request.getAttribute("customers");
+    List<Customer> customers = (List<Customer>) request.getAttribute("customerList");
 %>
 <!DOCTYPE html>
 <html>
@@ -13,6 +13,19 @@
 <body>
 <div class="container mt-5">
     <h2>Manage Customers</h2>
+    <!-- 🔍 Search Form -->
+    <form method="get" action="manage-customers" class="row g-3 mb-4">
+        <div class="col-md-4">
+            <input type="text" name="searchName" class="form-control" placeholder="Search by name" value="${param.searchName}">
+        </div>
+        <div class="col-md-4">
+            <input type="text" name="searchPhone" class="form-control" placeholder="Search by phone" value="${param.searchPhone}">
+        </div>
+        <div class="col-md-2">
+            <button type="submit" class="btn btn-primary">Search</button>
+        </div>
+    </form>
+
     <a href="add-customer.jsp" class="btn btn-success mb-3">Add New Customer</a>
     <table class="table table-striped">
         <thead>

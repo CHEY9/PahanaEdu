@@ -4,6 +4,7 @@ import com.example.pahanaedu2.db.DBConnection;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
+import com.example.pahanaedu2.audit.AuditLogDAO;
 
 import java.io.IOException;
 import java.sql.*;
@@ -40,6 +41,12 @@ public class EditCustomerServlet extends HttpServlet {
                     response.sendRedirect(request.getContextPath() + "/Admin/manage-customers");
                     return;
                 }
+                HttpSession session = request.getSession();
+                int userId = (int) session.getAttribute("userId");
+
+                AuditLogDAO logDAO = new AuditLogDAO();
+                logDAO.logAction(userId, "Edit Customer", "Updated customer ID: " + id);
+
             }
         } catch (SQLException e) {
             e.printStackTrace();

@@ -4,6 +4,7 @@ import com.example.pahanaedu2.db.DBConnection;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
+import com.example.pahanaedu2.audit.AuditLogDAO;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -38,6 +39,11 @@ public class AddCustomerServlet extends HttpServlet {
             } else {
                 request.setAttribute("errorMessage", "Failed to add customer.");
                 request.getRequestDispatcher("/Admin/add-customer.jsp").forward(request, response);
+                HttpSession session = request.getSession();
+                int userId = (int) session.getAttribute("userId");
+
+                AuditLogDAO logDAO = new AuditLogDAO();
+                logDAO.logAction(userId, "Add Customer", "Added customer: " + name + ", Email: " + email);
             }
 
         } catch (SQLException e) {
