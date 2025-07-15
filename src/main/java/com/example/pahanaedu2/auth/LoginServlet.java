@@ -52,6 +52,7 @@ public class LoginServlet extends HttpServlet {
             // Save to session
             HttpSession session = request.getSession();
             session.setAttribute("user", user);
+            session.setAttribute("userId", user.getId());  // or admin.getId()
 
             // Redirect based on role
             if ("admin".equalsIgnoreCase(user.getRole())) {

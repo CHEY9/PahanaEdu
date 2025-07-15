@@ -6,16 +6,51 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
-            background: #f8f9fa;
+            background-image: url('<%= request.getContextPath() %>/images/background.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            position: relative;
         }
-        .login-container {
-            max-width: 400px;
-            margin: 100px auto;
-            padding: 30px;
-            border-radius: 15px;
-            background: white;
-            box-shadow: 0 0 15px rgba(0,0,0,0.1);
-        }
+
+            body::before {
+                content: "";
+                position: fixed;
+                top: 0;
+                left: 0;
+                height: 100%;
+                width: 100%;
+                background-color: rgba(0, 0, 0, 0.7); /* faded white overlay */
+                z-index: -1;
+            }
+
+            .login-container {
+                font-weight: bold;
+                position: relative;
+                z-index: 1;
+                max-width: 400px;
+                margin: 100px auto;
+                padding: 30px;
+                border-radius: 15px;
+                background: rgba(255, 255, 255, 0.6); /* Light transparent glass */
+                box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+                backdrop-filter: blur(12px); /* Frosted glass effect */
+                -webkit-backdrop-filter: blur(12px); /* Safari support */
+                border: 1px solid rgba(255, 255, 255, 0.3);
+            }
+
+            .form-icon {
+                position: absolute;
+                top: 11px;
+                left: 10px;
+                font-size: 16px;
+                color: #aaa;
+            }
+
+            .input-group .form-control {
+                padding-left: 30px;
+            }
         .form-icon {
             position: absolute;
             top: 11px;
@@ -26,6 +61,7 @@
         .input-group .form-control {
             padding-left: 30px;
         }
+
     </style>
 </head>
 <body>
