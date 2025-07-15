@@ -1,11 +1,21 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="jakarta.servlet.http.HttpSession" %>
 <%@ page import="com.example.pahanaedu2.auth.User" %>
+<%@ page import="java.util.List" %>
+<%@ page import="com.example.pahanaedu2.item.Item" %>
+<%@ page import="java.util.ArrayList" %>
+
 
 <%
     User user = (session != null) ? (User) session.getAttribute("user") : null;
     if (user == null || !"admin".equalsIgnoreCase(user.getRole())) {
         response.sendRedirect("login.jsp");
+        return;
+    }
+%>
+<%
+    if (request.getAttribute("lowStockItems") == null) {
+        response.sendRedirect(request.getContextPath() + "/admin/dashboard");
         return;
     }
 %>
@@ -25,7 +35,11 @@
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container">
-        <a class="navbar-brand" href="#">PahanaEdu Admin</a>
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <img src="<%= request.getContextPath() %>/images/logo1.jpg" alt="Logo" width="30" height="30" class="d-inline-block align-text-top me-2">
+                PahanaEdu Admin
+            </a>
         <div class="collapse navbar-collapse">
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item">
@@ -41,10 +55,30 @@
             </ul>
         </div>
     </div>
+
 </nav>
 
 <div class="container mt-5">
     <h1 class="mb-4">Admin Dashboard</h1>
+
+    <%
+        Object lowStockRaw = request.getAttribute("lowStockItems");
+        List<Item> lowStockItems = (lowStockRaw instanceof List) ? (List<Item>) lowStockRaw : new ArrayList<>();
+
+        if (lowStockItems != null && !lowStockItems.isEmpty()) {
+    %>
+    <div class="alert alert-warning mt-4">
+        <h5>⚠️ Low Stock Alert</h5>
+        <ul>
+            <% for (Item item : lowStockItems) { %>
+            <li><strong><%= item.getItemName() %></strong> (Stock: <%= item.getStockQuantity() %>)</li>
+            <% } %>
+        </ul>
+    </div>
+    <%
+        }
+    %>
+    <p>Total low stock items: <%= lowStockItems.size() %></p>
     <p class="lead">Use the options below to manage the system.</p>
 
     <div class="row g-4">
@@ -79,7 +113,11 @@
                 View Reports
             </a>
         </div>
-
+        <div class="col-sm-6 col-md-4">
+        <a href="<%= request.getContextPath() %>/Admin/admin-profile.jsp" class="btn btn-success w-100 py-3 fs-5">
+            Profile Management
+            </a>
+        </div>
     </div>
 </div>
 
