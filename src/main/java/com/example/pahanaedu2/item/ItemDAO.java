@@ -74,6 +74,40 @@ public class ItemDAO {
         }
         return items;
     }
+    public List<Item> getLowStockItems(int threshold) {
+        List<Item> lowStockItems = new ArrayList<>();
+        String sql = "SELECT * FROM Items WHERE stockQuantity < ?";
+
+        try (Connection connection = getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
+            preparedStatement.setInt(1, threshold);
+            ResultSet rs = preparedStatement.executeQuery();
+
+            System.out.println("Fetching low stock items from DB...");
+            while (rs.next()) {
+                int stockQty = rs.getInt("stockQuantity");
+                String itemName = rs.getString("ItemName");
+
+                System.out.println("Found: " + itemName + " (Stock: " + stockQty + ")");
+
+                Item item = new Item(
+                        rs.getInt("itemId"),
+                        itemName,
+                        rs.getString("category"),
+                        rs.getString("description"),
+                        rs.getDouble("price"),
+                        stockQty
+                );
+                lowStockItems.add(item);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return lowStockItems;
+    }
 
     // Update item
     public boolean updateItem(Item item) throws SQLException {
@@ -170,12 +204,9 @@ public class ItemDAO {
                 item.setStockQuantity(rs.getInt("stockQuantity"));
                 items.add(item);
             }
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
         return items;
     }
-
 }

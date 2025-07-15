@@ -1,11 +1,21 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="jakarta.servlet.http.HttpSession" %>
 <%@ page import="com.example.pahanaedu2.auth.User" %>
+<%@ page import="java.util.List" %>
+<%@ page import="com.example.pahanaedu2.item.Item" %>
+<%@ page import="java.util.ArrayList" %>
+
 
 <%
     User user = (session != null) ? (User) session.getAttribute("user") : null;
     if (user == null || !"admin".equalsIgnoreCase(user.getRole())) {
         response.sendRedirect("login.jsp");
+        return;
+    }
+%>
+<%
+    if (request.getAttribute("lowStockItems") == null) {
+        response.sendRedirect(request.getContextPath() + "/admin/dashboard");
         return;
     }
 %>
@@ -41,10 +51,30 @@
             </ul>
         </div>
     </div>
+
 </nav>
 
 <div class="container mt-5">
     <h1 class="mb-4">Admin Dashboard</h1>
+
+    <%
+        Object lowStockRaw = request.getAttribute("lowStockItems");
+        List<Item> lowStockItems = (lowStockRaw instanceof List) ? (List<Item>) lowStockRaw : new ArrayList<>();
+
+        if (lowStockItems != null && !lowStockItems.isEmpty()) {
+    %>
+    <div class="alert alert-warning mt-4">
+        <h5>⚠️ Low Stock Alert</h5>
+        <ul>
+            <% for (Item item : lowStockItems) { %>
+            <li><strong><%= item.getItemName() %></strong> (Stock: <%= item.getStockQuantity() %>)</li>
+            <% } %>
+        </ul>
+    </div>
+    <%
+        }
+    %>
+    <p>Total low stock items: <%= lowStockItems.size() %></p>
     <p class="lead">Use the options below to manage the system.</p>
 
     <div class="row g-4">
