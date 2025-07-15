@@ -61,7 +61,7 @@
         <% } %>
         </tbody>
     </table>
-    <a href="dashboard.jsp" class="btn btn-secondary mt-3">Back to Dashboard</a>
+    <a href="dashboard.jsp" class="btn btn-secondary mt-3">⬅ Back to Dashboard</a>
 </div>
 </body>
 </html>

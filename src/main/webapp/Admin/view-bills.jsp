@@ -38,7 +38,7 @@
         </tbody>
     </table>
 
-    <a href="${pageContext.request.contextPath}/Admin/dashboard.jsp" class="btn btn-secondary">Back to Dashboard</a>
+    <a href="${pageContext.request.contextPath}/Admin/dashboard.jsp" class="btn btn-secondary">⬅ Back to Dashboard</a>
 </div>
 </body>
 </html>

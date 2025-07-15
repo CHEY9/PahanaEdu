@@ -35,7 +35,11 @@
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container">
-        <a class="navbar-brand" href="#">PahanaEdu Admin</a>
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <img src="<%= request.getContextPath() %>/images/logo1.jpg" alt="Logo" width="30" height="30" class="d-inline-block align-text-top me-2">
+                PahanaEdu Admin
+            </a>
         <div class="collapse navbar-collapse">
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item">
@@ -109,7 +113,11 @@
                 View Reports
             </a>
         </div>
-
+        <div class="col-sm-6 col-md-4">
+        <a href="<%= request.getContextPath() %>/Admin/admin-profile.jsp" class="btn btn-success w-100 py-3 fs-5">
+            Profile Management
+            </a>
+        </div>
     </div>
 </div>
 
