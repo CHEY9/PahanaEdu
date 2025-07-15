@@ -7,6 +7,7 @@ public class User {
     private String email;
     private String phone;
     private String role;
+    private String profilePicturePath; // Path to image in server
 
     // No-argument constructor
     public User() {
@@ -58,4 +59,11 @@ public class User {
     public void setRole(String role) {
         this.role = role;
     }
+    public String getProfilePicturePath() {
+        return profilePicturePath;
+    }
+    public void setProfilePicturePath(String profilePicturePath) {
+        this.profilePicturePath = profilePicturePath;
+    }
+
 }

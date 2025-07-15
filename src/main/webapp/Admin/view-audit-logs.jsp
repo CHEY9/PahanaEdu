@@ -6,6 +6,7 @@
     <title>Audit Logs</title>
     <!-- Bootstrap CSS CDN -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <style>
         body {
             background-color: #f4f6f9;
@@ -56,8 +57,5 @@
     </div>
     <a href="dashboard.jsp" class="btn btn-secondary mt-3">Back to Dashboard</a>
 </div>
-
-<!-- Optional Bootstrap JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
