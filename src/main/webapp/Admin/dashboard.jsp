@@ -109,7 +109,7 @@
             </a>
         </div>
         <div class="col-sm-6 col-md-4">
-            <a href="<%= request.getContextPath() %>/Admin/view-reports.jsp" class="btn btn-info w-100 py-3 fs-5">
+            <a href="<%= request.getContextPath() %>/Admin/view-reports" class="btn btn-info w-100 py-3 fs-5">
                 View Reports
             </a>
         </div>
