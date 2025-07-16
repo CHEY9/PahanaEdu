@@ -5,5 +5,8 @@
     <file url="file://$PROJECT_DIR$/src/main/java/com/example/pahanaedu2/bill/BillDAO.java" dialect="GenericSQL" />
     <file url="file://$PROJECT_DIR$/src/main/java/com/example/pahanaedu2/customer/ManageCustomersServlet.java" dialect="GenericSQL" />
     <file url="file://$PROJECT_DIR$/src/main/java/com/example/pahanaedu2/item/ItemDAO.java" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/example/pahanaedu2/reports/DailyMonthlyReportServlet.java" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/example/pahanaedu2/reports/MostSoldItemsServlet.java" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/example/pahanaedu2/reports/TopCustomersServlet.java" dialect="GenericSQL" />
   </component>
 </project>
