@@ -76,13 +76,13 @@
             </a>
         </div>
         <div class="col-sm-6 col-md-4">
-            <a href="<%= request.getContextPath() %>/Staff/manage-items" class="btn btn-outline-primary w-100 py-3 fs-5">
+            <a href="<%= request.getContextPath() %>/Staff/manage-items" class="btn btn-info w-100 py-3 fs-5">
                 Manage Items
             </a>
         </div>
         <div class="col-sm-6 col-md-4">
-            <a href="<%= request.getContextPath() %>/view-bills" class="btn btn-secondary w-100 py-3 fs-5">
-                View Bills
+            <a href="<%= request.getContextPath() %>/Manage-bills" class="btn btn-secondary w-100 py-3 fs-5">
+                Manage Bills
             </a>
         </div>
         <div class="col-sm-6 col-md-4">
@@ -91,7 +91,7 @@
             </a>
         </div>
         <div class="col-sm-6 col-md-4">
-            <a href="<%= request.getContextPath() %>/Staff/help.jsp" class="btn btn-info w-100 py-3 fs-5">
+            <a href="<%= request.getContextPath() %>/Staff/help.jsp" class="btn btn-outline-primary w-100 py-3 fs-5">
                 ❓ Help & Support
             </a>
         </div>
