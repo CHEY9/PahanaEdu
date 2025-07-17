@@ -81,7 +81,7 @@
             </a>
         </div>
         <div class="col-sm-6 col-md-4">
-            <a href="<%= request.getContextPath() %>/Manage-bills" class="btn btn-secondary w-100 py-3 fs-5">
+            <a href="<%= request.getContextPath() %>/staff/manage-bills" class="btn btn-secondary w-100 py-3 fs-5">
                 Manage Bills
             </a>
         </div>
