@@ -6,6 +6,7 @@ public class Bill {
     private int billId;
     private int Id;
     private int itemId;
+    private String itemName;
     private int quantity;
     private double unitPrice;
     private double totalPrice;
@@ -48,6 +49,10 @@ public class Bill {
     public void setItemId(int itemId) {
         this.itemId = itemId;
     }
+
+    public String getItemName() {return itemName;}
+
+    public void setItemName(String itemName) {this.itemName = itemName;}
 
     public int getQuantity() {
         return quantity;

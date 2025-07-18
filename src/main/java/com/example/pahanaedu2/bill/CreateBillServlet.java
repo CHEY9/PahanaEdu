@@ -1,5 +1,6 @@
 package com.example.pahanaedu2.bill;
 
+import com.example.pahanaedu2.customer.Customer;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
@@ -39,7 +40,6 @@ public class CreateBillServlet extends HttpServlet {
             return;
         }
 
-        // Filter out items with quantity <= 0
         List<Integer> filteredItemIds = new ArrayList<>();
         List<Integer> filteredQuantities = new ArrayList<>();
 
@@ -51,7 +51,6 @@ public class CreateBillServlet extends HttpServlet {
                     filteredQuantities.add(qty);
                 }
             } catch (NumberFormatException e) {
-                // skip invalid quantities
             }
         }
 
@@ -61,10 +60,9 @@ public class CreateBillServlet extends HttpServlet {
         }
 
         try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS)) {
-            conn.setAutoCommit(false);  // start transaction
+            conn.setAutoCommit(false);
 
             try {
-                // Prepare statement to get price and stock for each item
                 String priceQuery = "SELECT price, stockQuantity FROM items WHERE itemId = ?";
                 PreparedStatement priceStmt = conn.prepareStatement(priceQuery);
 
@@ -103,7 +101,7 @@ public class CreateBillServlet extends HttpServlet {
                 priceStmt.close();
 
                 // Insert into bills table
-                String insertBillSQL = "INSERT INTO bills (Id, totalAmount, dateTime) VALUES (?, ?, ?)";
+                String insertBillSQL = "INSERT INTO bills (Id, totalAmount, bill_date_time) VALUES (?, ?, ?)";
                 PreparedStatement billStmt = conn.prepareStatement(insertBillSQL, Statement.RETURN_GENERATED_KEYS);
 
                 LocalDateTime now = LocalDateTime.now();
@@ -133,7 +131,6 @@ public class CreateBillServlet extends HttpServlet {
                 String insertBillItemSQL = "INSERT INTO bill_items (bill_Id, item_Id, quantity, unit_Price, total_Price) VALUES (?, ?, ?, ?, ?)";
                 PreparedStatement billItemStmt = conn.prepareStatement(insertBillItemSQL);
 
-                // Update stock quantity SQL
                 String updateStockSQL = "UPDATE items SET stockQuantity = ? WHERE itemId = ?";
                 PreparedStatement updateStockStmt = conn.prepareStatement(updateStockSQL);
 
@@ -161,7 +158,91 @@ public class CreateBillServlet extends HttpServlet {
 
                 conn.commit();
 
-                response.sendRedirect(request.getContextPath() + "/staff/bills?success=true");
+                // Load bill items
+                String billItemsSQL = "SELECT bi.item_Id, i.itemName, bi.quantity, bi.unit_Price, bi.total_Price " +
+                        "FROM bill_items bi JOIN items i ON bi.item_Id = i.itemId WHERE bi.bill_Id = ?";
+
+                PreparedStatement billItemsStmt = conn.prepareStatement(billItemsSQL);
+                billItemsStmt.setInt(1, billId);
+                ResultSet rsItems = billItemsStmt.executeQuery();
+
+                List<Bill> billItems = new ArrayList<>();
+                while (rsItems.next()) {
+                    Bill bi = new Bill();
+
+                    bi.setItemId(rsItems.getInt("item_Id"));
+                    bi.setItemName(rsItems.getString("itemName"));
+                    bi.setQuantity(rsItems.getInt("quantity"));
+                    bi.setUnitPrice(rsItems.getDouble("unit_Price"));
+                    bi.setTotalPrice(rsItems.getDouble("total_Price"));
+
+                    billItems.add(bi);
+                }
+                rsItems.close();
+                billItemsStmt.close();
+
+                request.setAttribute("billItems", billItems);
+
+                // Load customer details
+                String customerSQL = "SELECT id, name FROM customers WHERE id = ?";
+                PreparedStatement customerStmt = conn.prepareStatement(customerSQL);
+                customerStmt.setInt(1, customerId);
+                ResultSet rsCustomer = customerStmt.executeQuery();
+
+                Customer customer = null;
+                if (rsCustomer.next()) {
+                    customer = new Customer();
+                    customer.setId(rsCustomer.getInt("id"));
+                    customer.setName(rsCustomer.getString("name"));
+                }
+                rsCustomer.close();
+                customerStmt.close();
+
+                request.setAttribute("customer", customer);
+
+                // Load bill info
+                String billInfoSQL = "SELECT totalAmount, bill_date_time FROM bills WHERE bill_id = ?";
+                PreparedStatement billInfoStmt = conn.prepareStatement(billInfoSQL);
+                billInfoStmt.setInt(1, billId);
+                ResultSet rsBillInfo = billInfoStmt.executeQuery();
+
+                double totalAmountFromDB = 0;
+                String billDateTime = "";
+                if (rsBillInfo.next()) {
+                    totalAmountFromDB = rsBillInfo.getDouble("totalAmount");
+                    billDateTime = rsBillInfo.getString("bill_date_time");
+                }
+                rsBillInfo.close();
+                billInfoStmt.close();
+
+                request.setAttribute("totalAmount", totalAmountFromDB);
+                request.setAttribute("billDateTime", billDateTime);
+                request.setAttribute("billId", billId);
+
+                HttpSession session = request.getSession(false);
+                String staffUsername = (session != null) ? (String) session.getAttribute("username") : "Unknown";
+                int userId = (session != null && session.getAttribute("userId") != null)
+                        ? (int) session.getAttribute("userId") : -1;
+
+                if (userId != -1) {
+                    String staffSQL = "SELECT username FROM users WHERE id = ?";
+                    PreparedStatement staffStmt = conn.prepareStatement(staffSQL);
+                    staffStmt.setInt(1, userId);
+                    ResultSet rsStaff = staffStmt.executeQuery();
+                    if (rsStaff.next()) {
+                        staffUsername = rsStaff.getString("username");
+                    }
+                    rsStaff.close();
+                    staffStmt.close();
+                }
+
+                request.setAttribute("staffUsername", staffUsername);
+                System.out.println("Staff username from DB: " + staffUsername);
+
+                request.setAttribute("staffUsername", staffUsername);
+                System.out.println("Staff username in session: " + staffUsername);
+
+                request.getRequestDispatcher("/Staff/bill-details.jsp").forward(request, response);
 
             } catch (Exception e) {
                 conn.rollback();

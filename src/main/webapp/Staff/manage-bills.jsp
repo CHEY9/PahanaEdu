@@ -36,7 +36,7 @@
         <a href="manage-bills" class="btn btn-secondary w-100">Reset</a>
       </div>
       <div class="col-md-8 text-end">
-        <a href="create-bill-form" class="btn btn-success">+ Create New Bill</a>
+        <a href="${pageContext.request.contextPath}/Staff/create-bill-form" class="btn btn-success">+ Create New Bill</a>
       </div>
     </div>
   </form>

@@ -23,30 +23,32 @@ public class CreateBillFormServlet extends HttpServlet {
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
             Connection conn = DriverManager.getConnection(jdbcURL, jdbcUsername, jdbcPassword);
 
-            // Load customers
-            String sqlCustomers = "SELECT customerId, name FROM customers";
+            // Load customers - updated column names
+            String sqlCustomers = "SELECT id, name FROM customers";
             PreparedStatement ps1 = conn.prepareStatement(sqlCustomers);
             ResultSet rs1 = ps1.executeQuery();
             while (rs1.next()) {
                 Map<String, Object> customer = new HashMap<>();
-                customer.put("id", rs1.getInt("customerId"));
+                customer.put("id", rs1.getInt("id"));
                 customer.put("name", rs1.getString("name"));
                 customers.add(customer);
             }
+            System.out.println("Customers loaded: " + customers.size());
 
-            // Load items
-            String sqlItems = "SELECT itemId, itemName, category, price, stockQuantity FROM items";
+            // Load items - updated column names
+            String sqlItems = "SELECT ItemID, ItemName, Category, Price, StockQuantity FROM items";
             PreparedStatement ps2 = conn.prepareStatement(sqlItems);
             ResultSet rs2 = ps2.executeQuery();
             while (rs2.next()) {
                 Map<String, Object> item = new HashMap<>();
-                item.put("id", rs2.getInt("itemId"));
-                item.put("name", rs2.getString("itemName"));
-                item.put("category", rs2.getString("category"));
-                item.put("price", rs2.getDouble("price"));
-                item.put("stock", rs2.getInt("stockQuantity"));
+                item.put("id", rs2.getInt("ItemID"));
+                item.put("name", rs2.getString("ItemName"));
+                item.put("category", rs2.getString("Category"));
+                item.put("price", rs2.getDouble("Price"));
+                item.put("stock", rs2.getInt("StockQuantity"));
                 items.add(item);
             }
+            System.out.println("Items loaded: " + items.size());
 
             conn.close();
 

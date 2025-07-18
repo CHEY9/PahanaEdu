@@ -8,15 +8,27 @@ import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.HashMap;
 
-@WebServlet("/staff/bill-details")
+@WebServlet("/Staff/bill-details")
 public class BillDetailsServlet extends HttpServlet {
 
     private static final String DB_URL = "jdbc:sqlserver://localhost:1433;databaseName=PahanaEdu;encrypt=true;trustServerCertificate=true";
     private static final String DB_USER = "sa";
     private static final String DB_PASS = "12345";
+
+    public static class BillItem {
+        public String itemName;
+        public int quantity;
+        public double unitPrice;
+        public double totalPrice;
+
+        public BillItem(String itemName, int quantity, double unitPrice, double totalPrice) {
+            this.itemName = itemName;
+            this.quantity = quantity;
+            this.unitPrice = unitPrice;
+            this.totalPrice = totalPrice;
+        }
+    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -24,7 +36,7 @@ public class BillDetailsServlet extends HttpServlet {
 
         String billIdStr = request.getParameter("billId");
         if (billIdStr == null) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing bill ID");
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing billId");
             return;
         }
 
@@ -32,68 +44,67 @@ public class BillDetailsServlet extends HttpServlet {
         try {
             billId = Integer.parseInt(billIdStr);
         } catch (NumberFormatException e) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid bill ID");
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid billId");
             return;
         }
 
-        // Bill info
-        Map<String, Object> bill = new HashMap<>();
-        // Bill items list
-        List<Map<String, Object>> itemsList = new ArrayList<>();
+        String customerName = "";
+        String billDateTime = "";
+        double totalAmount = 0;
+
+        String staffUsername = (String) request.getSession().getAttribute("username");
+        if (staffUsername == null) staffUsername = "Unknown Staff";
+
+        List<BillItem> billItems = new ArrayList<>();
 
         try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS)) {
+            // Get bill and customer info
+            String billSql = "SELECT b.dateTime, b.totalAmount, c.name AS customerName FROM bills b JOIN customers c ON b.Id = c.id WHERE b.bill_id = ?";
+            PreparedStatement ps = conn.prepareStatement(billSql);
+            ps.setInt(1, billId);
+            ResultSet rs = ps.executeQuery();
 
-            // Get bill header and customer name
-            String billSql = "SELECT b.bill_id, b.Id AS customerId, c.name AS customerName, b.total_price, b.dateTime " +
-                    "FROM bills b " +
-                    "JOIN customers c ON b.Id = c.id " +
-                    "WHERE b.bill_id = ?";
-
-            try (PreparedStatement stmt = conn.prepareStatement(billSql)) {
-                stmt.setInt(1, billId);
-                try (ResultSet rs = stmt.executeQuery()) {
-                    if (rs.next()) {
-                        bill.put("billId", rs.getInt("bill_id"));
-                        bill.put("customerId", rs.getInt("customerId"));
-                        bill.put("customerName", rs.getString("customerName"));
-                        bill.put("total_price", rs.getDouble("total_price"));
-                        bill.put("dateTime", rs.getString("dateTime"));
-                    } else {
-                        response.sendError(HttpServletResponse.SC_NOT_FOUND, "Bill not found");
-                        return;
-                    }
-                }
+            if (rs.next()) {
+                billDateTime = rs.getString("dateTime");
+                totalAmount = rs.getDouble("totalAmount");
+                customerName = rs.getString("customerName");
+            } else {
+                response.sendError(HttpServletResponse.SC_NOT_FOUND, "Bill not found");
+                return;
             }
+            rs.close();
+            ps.close();
 
-            // Get bill items details joined with item info
-            String itemsSql = "SELECT bi.item_Id, i.itemName, i.category, bi.quantity, bi.unit_Price, bi.total_Price " +
-                    "FROM bill_items bi " +
-                    "JOIN items i ON bi.item_Id = i.itemId " +
-                    "WHERE bi.bill_Id = ?";
+            // Get bill items
+            String itemsSql = "SELECT i.itemName, bi.quantity, bi.unit_Price, bi.total_Price FROM bill_items bi JOIN items i ON bi.item_Id = i.itemId WHERE bi.bill_Id = ?";
+            PreparedStatement psItems = conn.prepareStatement(itemsSql);
+            psItems.setInt(1, billId);
+            ResultSet rsItems = psItems.executeQuery();
 
-            try (PreparedStatement stmt = conn.prepareStatement(itemsSql)) {
-                stmt.setInt(1, billId);
-                try (ResultSet rs = stmt.executeQuery()) {
-                    while (rs.next()) {
-                        Map<String, Object> item = new HashMap<>();
-                        item.put("itemId", rs.getInt("item_Id"));
-                        item.put("itemName", rs.getString("itemName"));
-                        item.put("category", rs.getString("category"));
-                        item.put("quantity", rs.getInt("quantity"));
-                        item.put("unitPrice", rs.getDouble("unit_Price"));
-                        item.put("totalPrice", rs.getDouble("total_Price"));
-                        itemsList.add(item);
-                    }
-                }
+            while (rsItems.next()) {
+                billItems.add(new BillItem(
+                        rsItems.getString("itemName"),
+                        rsItems.getInt("quantity"),
+                        rsItems.getDouble("unit_Price"),
+                        rsItems.getDouble("total_Price")
+                ));
             }
-
-            request.setAttribute("bill", bill);
-            request.setAttribute("itemsList", itemsList);
-            request.getRequestDispatcher("/Staff/bill-details.jsp").forward(request, response);
+            rsItems.close();
+            psItems.close();
 
         } catch (SQLException e) {
             e.printStackTrace();
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Database error: " + e.getMessage());
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "DB error: " + e.getMessage());
+            return;
         }
+
+        request.setAttribute("customerName", customerName);
+        request.setAttribute("billDateTime", billDateTime);
+        request.setAttribute("totalAmount", totalAmount);
+        request.setAttribute("staffUsername", staffUsername);
+        request.setAttribute("billItems", billItems);
+
+        // Forward to JSP to display bill details
+        request.getRequestDispatcher("/WEB-INF/Staff/bill-details.jsp").forward(request, response);
     }
 }
