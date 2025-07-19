@@ -86,8 +86,8 @@
             </a>
         </div>
         <div class="col-sm-6 col-md-4">
-            <a href="<%= request.getContextPath() %>/Staff/staff-profile.jsp" class="btn btn-success w-100 py-3 fs-5">
-                Profile Management
+            <a href="<%= request.getContextPath() %>/Staff/profile.jsp" class="btn btn-success w-100 py-3 fs-5">
+                👤 Profile Management
             </a>
         </div>
         <div class="col-sm-6 col-md-4">
