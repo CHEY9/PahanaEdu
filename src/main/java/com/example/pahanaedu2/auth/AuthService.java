@@ -4,15 +4,14 @@ import com.example.pahanaedu2.db.DBConnection;
 
 import java.sql.*;
 import com.example.pahanaedu2.db.DBConnection;
-import com.example.pahanaedu2.auth.User;  // adjust package if needed
+import com.example.pahanaedu2.auth.User;
 
 public class AuthService {
 
     // Register a new user (Admin or Staff)
     public boolean registerUser(User user) {
-        // Check if user or email exists first
+
         if (isUserExists(user.getUsername(), user.getEmail())) {
-            // User or email exists - do not register again
             return false;
         }
         String sql = "INSERT INTO Users (username, password, email, phone, role) VALUES (?, ?, ?, ?, ?)";
@@ -21,7 +20,7 @@ public class AuthService {
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, user.getUsername());
-            stmt.setString(2, user.getPassword());  // 🔒 Hashing recommended in production
+            stmt.setString(2, user.getPassword());
             stmt.setString(3, user.getEmail());
             stmt.setString(4, user.getPhone());
             stmt.setString(5, user.getRole());
@@ -40,14 +39,13 @@ public class AuthService {
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            //  Convert both username and email to lowercase and trim
             stmt.setString(1, username.trim().toLowerCase());
             stmt.setString(2, email.trim().toLowerCase());
 
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
                 int count = rs.getInt(1);
-                System.out.println("User check count: " + count); // Debug print
+                System.out.println("User check count: " + count);
                 return count > 0;
             }
         } catch (SQLException e) {
@@ -55,7 +53,6 @@ public class AuthService {
         }
         return false;
     }
-    // Login method: returns User object if login is correct, null otherwise
     public User login(String username, String password) {
         String sql = "SELECT * FROM Users WHERE username=? AND password=?";
 
@@ -70,8 +67,8 @@ public class AuthService {
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
-                System.out.println("Login successful for: " + username); //  Add this
-                User user = new User();  // requires no-arg constructor
+                System.out.println("Login successful for: " + username);
+                User user = new User();
                 user.setId(rs.getInt("id"));
                 user.setUsername(rs.getString("username"));
                 user.setPassword(rs.getString("password"));
@@ -80,7 +77,7 @@ public class AuthService {
                 user.setRole(rs.getString("role"));
                 return user;
             } else {
-                System.out.println("Login failed for: " + username); //  Will print this now
+                System.out.println("Login failed for: " + username);
             }
 
         } catch (SQLException e) {

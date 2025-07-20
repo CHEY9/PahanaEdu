@@ -15,7 +15,6 @@ public class TopCustomersServlet extends HttpServlet {
 
         List<Map<String, Object>> topCustomers = new ArrayList<>();
 
-        // Define your SQL query here (using exact column names and aliases)
         String sql = "SELECT c.id, c.name, SUM(bi.quantity * bi.unit_price) AS totalSpent " +
                 "FROM Customers c " +
                 "JOIN bills b ON c.id = b.id " +
@@ -31,7 +30,6 @@ public class TopCustomersServlet extends HttpServlet {
 
             while (rs.next()) {
                 Map<String, Object> row = new HashMap<>();
-                // Use column labels matching your SQL select aliases
                 row.put("id", rs.getInt("id"));
                 row.put("name", rs.getString("name"));
                 row.put("totalSpent", rs.getDouble("totalSpent"));
@@ -40,7 +38,6 @@ public class TopCustomersServlet extends HttpServlet {
 
         } catch (SQLException e) {
             e.printStackTrace();
-            // Optionally, you can set an error message attribute for the JSP here
             request.setAttribute("error", "Database error: " + e.getMessage());
         }
 

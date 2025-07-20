@@ -26,14 +26,12 @@ public class AdminDashboardServlet extends HttpServlet {
         }
 
         ItemDAO itemDAO = new ItemDAO();
-        List<Item> lowStockItems = itemDAO.getLowStockItems(10); // you added this in ItemDAO
+        List<Item> lowStockItems = itemDAO.getLowStockItems(10);
         System.out.println("Low stock items count: " + lowStockItems.size());
         for (Item item : lowStockItems) {
             System.out.println("Item: " + item.getItemName() + " | Stock: " + item.getStockQuantity());
         }
-        request.setAttribute("lowStockItems", lowStockItems);// this is a List<Item>
-        // You can add dashboard data here, e.g. stats
-        // request.setAttribute("userCount", someService.getUserCount());
+        request.setAttribute("lowStockItems", lowStockItems);
         System.out.println("🚀 Servlet is called");
         request.getRequestDispatcher("/Admin/dashboard.jsp").forward(request, response);
     }

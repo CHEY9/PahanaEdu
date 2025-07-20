@@ -7,13 +7,11 @@ public class User {
     private String email;
     private String phone;
     private String role;
-    private String profilePicturePath; // Path to image in server
+    private String profilePicturePath;
 
-    // No-argument constructor
     public User() {
     }
 
-    // All-arguments constructor
     public User(String username, String password, String email, String phone, String role) {
         this.username = username;
         this.password = password;

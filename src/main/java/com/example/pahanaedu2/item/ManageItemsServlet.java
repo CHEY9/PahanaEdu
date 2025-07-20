@@ -98,7 +98,7 @@ public class ManageItemsServlet extends HttpServlet {
         itemDAO.insertItem(newItem);
         response.sendRedirect(request.getContextPath() + "/Admin/manage-items");
         HttpSession session = request.getSession();
-        int userId = (int) session.getAttribute("userId");  // set at login
+        int userId = (int) session.getAttribute("userId");
 
         AuditLogDAO logDAO = new AuditLogDAO();
         logDAO.logAction(userId, "Add Item", "Added item: " + ItemName + ", Category: " + category);
@@ -129,7 +129,7 @@ public class ManageItemsServlet extends HttpServlet {
         itemDAO.deleteItem(id);
         response.sendRedirect(request.getContextPath() + "/Admin/manage-items");
         HttpSession session = request.getSession();
-        int userId = (int) session.getAttribute("userId"); // Get user ID from session (or however you store logged-in admin ID)
+        int userId = (int) session.getAttribute("userId"); // Get user ID from session
         AuditLogDAO logDAO = new AuditLogDAO();
         logDAO.logAction(userId, "Delete Item", "Deleted item with ID: " + id);
 

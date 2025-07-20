@@ -28,12 +28,10 @@ public class UpdateAdminProfileServlet extends HttpServlet {
 
         String newPassword = request.getParameter("newPassword");
 
-        // Update password if provided
         if (newPassword != null && !newPassword.trim().isEmpty()) {
             System.out.println("Updating password to: " + newPassword);
         }
 
-        // Handle profile picture upload
         Part filePart = request.getPart("profilePicture");
         if (filePart != null && filePart.getSize() > 0) {
             String fileName = user.getUsername() + "_profile.jpg";
@@ -44,7 +42,6 @@ public class UpdateAdminProfileServlet extends HttpServlet {
 
             filePart.write(uploadPath + File.separator + fileName);
 
-            // Optional: Store file path in DB
             System.out.println("Profile picture saved: " + uploadPath + File.separator + fileName);
         }
 
