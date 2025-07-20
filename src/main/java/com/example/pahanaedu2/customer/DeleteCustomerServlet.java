@@ -41,7 +41,6 @@ public class DeleteCustomerServlet extends HttpServlet {
 
         } catch (SQLException e) {
             e.printStackTrace();
-            // Optional: set error message in session/request
         }
 
         response.sendRedirect(request.getContextPath() + "/Admin/manage-customers?success=3");

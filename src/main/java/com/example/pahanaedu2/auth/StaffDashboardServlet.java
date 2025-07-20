@@ -2,16 +2,15 @@ package com.example.pahanaedu2.auth;
 
 import com.example.pahanaedu2.item.Item;
 import com.example.pahanaedu2.item.ItemDAO;
-import java.util.List;
-import com.example.pahanaedu2.auth.User;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 
 import java.io.IOException;
+import java.util.List;
 
-@WebServlet("/admin/dashboard")
-public class AdminDashboardServlet extends HttpServlet {
+@WebServlet("/Staff/staff-dashboard")
+public class StaffDashboardServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -20,19 +19,16 @@ public class AdminDashboardServlet extends HttpServlet {
         HttpSession session = request.getSession(false);
         User user = (session != null) ? (User) session.getAttribute("user") : null;
 
-        if (user == null || !"admin".equalsIgnoreCase(user.getRole())) {
+        if (user == null || !"staff".equalsIgnoreCase(user.getRole())) {
             response.sendRedirect(request.getContextPath() + "/login.jsp");
             return;
         }
 
+        // low stock items
         ItemDAO itemDAO = new ItemDAO();
         List<Item> lowStockItems = itemDAO.getLowStockItems(10);
-        System.out.println("Low stock items count: " + lowStockItems.size());
-        for (Item item : lowStockItems) {
-            System.out.println("Item: " + item.getItemName() + " | Stock: " + item.getStockQuantity());
-        }
         request.setAttribute("lowStockItems", lowStockItems);
-        System.out.println("🚀 Servlet is called");
-        request.getRequestDispatcher("/Admin/dashboard.jsp").forward(request, response);
+
+        request.getRequestDispatcher("/Staff/dashboard.jsp").forward(request, response);
     }
 }

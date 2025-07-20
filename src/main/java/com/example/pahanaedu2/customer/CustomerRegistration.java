@@ -6,9 +6,9 @@ import java.util.Scanner;
 
 public class CustomerRegistration {
 
-    // Stores registered customers: username -> Customer object
+
     private Map<String, Customer> customerMap = new HashMap<>();
-    private int nextId = 1;  // For auto-incrementing customer IDs
+    private int nextId = 1;
 
     public boolean registerCustomer(Scanner scanner) {
         System.out.print("Enter Username: ");
@@ -24,7 +24,6 @@ public class CustomerRegistration {
             return false;
         }
 
-        // Optional: You can remove this password if it's not necessary for customers here
         System.out.print("Enter Password (min 6 characters): ");
         String password = scanner.nextLine().trim();
         if (password.length() < 6) {
@@ -60,20 +59,16 @@ public class CustomerRegistration {
             return false;
         }
 
-        // Assign auto-incremented id
         int id = nextId++;
 
-        // Create new Customer object with collected info
         Customer newCustomer = new Customer(id, name, email, phone, address);
 
-        // Store in map with username as key
         customerMap.put(username, newCustomer);
 
         System.out.println("Registration successful!");
         return true;
     }
 
-    // For accessing registered customers map externally
     public Map<String, Customer> getCustomerMap() {
         return customerMap;
     }

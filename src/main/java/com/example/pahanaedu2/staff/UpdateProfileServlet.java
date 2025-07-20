@@ -1,5 +1,6 @@
-package com.example.pahanaedu2.auth;
+package com.example.pahanaedu2.staff;
 
+import com.example.pahanaedu2.auth.User;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
@@ -8,9 +9,9 @@ import jakarta.servlet.http.*;
 import java.io.File;
 import java.io.IOException;
 
-@WebServlet("/admin/update-profile")
+@WebServlet("/staff/update-profile")
 @MultipartConfig(fileSizeThreshold = 1024 * 1024, maxFileSize = 2 * 1024 * 1024)
-public class UpdateAdminProfileServlet extends HttpServlet {
+public class UpdateProfileServlet extends HttpServlet {
 
     private static final String UPLOAD_DIR = "uploads/profile-pictures";
 
@@ -21,7 +22,7 @@ public class UpdateAdminProfileServlet extends HttpServlet {
         HttpSession session = request.getSession(false);
         User user = (session != null) ? (User) session.getAttribute("user") : null;
 
-        if (user == null || !"admin".equalsIgnoreCase(user.getRole())) {
+        if (user == null || !"staff".equalsIgnoreCase(user.getRole())) {
             response.sendRedirect(request.getContextPath() + "/login.jsp");
             return;
         }
@@ -34,7 +35,7 @@ public class UpdateAdminProfileServlet extends HttpServlet {
 
         Part filePart = request.getPart("profilePicture");
         if (filePart != null && filePart.getSize() > 0) {
-            String fileName = user.getUsername() + "_profile.jpg";
+            String fileName = user.getUsername() + "_staff_profile.jpg";
             String uploadPath = getServletContext().getRealPath("") + File.separator + UPLOAD_DIR;
 
             File uploadDir = new File(uploadPath);
@@ -45,6 +46,6 @@ public class UpdateAdminProfileServlet extends HttpServlet {
             System.out.println("Profile picture saved: " + uploadPath + File.separator + fileName);
         }
 
-        response.sendRedirect(request.getContextPath() + "/admin/dashboard");
+        response.sendRedirect(request.getContextPath() + "/Staff/dashboard.jsp");
     }
 }

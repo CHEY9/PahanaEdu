@@ -24,7 +24,6 @@ public class DeleteUserServlet extends HttpServlet {
 
         } catch (SQLException e) {
             e.printStackTrace();
-            // optionally set error message
         }
 
         response.sendRedirect(request.getContextPath() + "/Admin/manage-users");
