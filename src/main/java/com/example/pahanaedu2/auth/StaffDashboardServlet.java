@@ -24,7 +24,7 @@ public class StaffDashboardServlet extends HttpServlet {
             return;
         }
 
-        // Fetch low stock items
+        // low stock items
         ItemDAO itemDAO = new ItemDAO();
         List<Item> lowStockItems = itemDAO.getLowStockItems(10);
         request.setAttribute("lowStockItems", lowStockItems);

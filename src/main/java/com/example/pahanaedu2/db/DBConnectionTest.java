@@ -5,7 +5,6 @@ import java.sql.SQLException;
 
 public class DBConnectionTest {
     public static void main(String[] args) {
-        // Update these values with your SQL Server details
         String url = "jdbc:sqlserver://localhost:1433;databaseName=PahanaEdu;encrypt=false";
         String user = "sa";
         String password = "12345";

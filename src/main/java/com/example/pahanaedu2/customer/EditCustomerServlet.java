@@ -14,7 +14,7 @@ public class EditCustomerServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // Get customer ID from query parameter
+
         String idStr = request.getParameter("id");
         if (idStr == null) {
             response.sendRedirect(request.getContextPath() + "/Admin/manage-customers");

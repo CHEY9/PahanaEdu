@@ -25,7 +25,7 @@ public class RegisterServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        // Read form data
+
         String username = request.getParameter("username").trim();
         String password = request.getParameter("password").trim();
         String confirmPassword = request.getParameter("confirmPassword").trim();
@@ -33,7 +33,6 @@ public class RegisterServlet extends HttpServlet {
         String phone = request.getParameter("phone").trim();
         String role = request.getParameter("role").trim();
 
-        // Validate input
         StringBuilder errorMsg = new StringBuilder();
 
         if (username == null || !USERNAME_PATTERN.matcher(username).matches()) {

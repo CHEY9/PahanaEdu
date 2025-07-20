@@ -22,7 +22,7 @@ public class StaffManageCustomersServlet extends HttpServlet {
         }
 
         try {
-            List<Customer> customers = Customer.getAllCustomers(); // Static method in Customer class
+            List<Customer> customers = Customer.getAllCustomers();
             request.setAttribute("customerList", customers);
             request.getRequestDispatcher("/Staff/manage-customers.jsp").forward(request, response);
         } catch (Exception e) {

@@ -16,7 +16,7 @@ import java.sql.SQLException;
 @WebServlet("/Staff/delete-customer")
 public class DeleteCustomerServlet extends HttpServlet {
 
-    // Helper method to get customer name by ID before deleting
+
     private String getCustomerName(Connection conn, int customerId) throws SQLException {
         String name = "Unknown";
         String sql = "SELECT name FROM customers WHERE id = ?";

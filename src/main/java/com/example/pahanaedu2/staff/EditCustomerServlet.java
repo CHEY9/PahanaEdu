@@ -28,7 +28,6 @@ public class EditCustomerServlet extends HttpServlet {
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
-                // Create a Customer object using values from the ResultSet
                 Customer customer = new Customer(
                         rs.getInt("id"),
                         rs.getString("name"),
@@ -36,7 +35,6 @@ public class EditCustomerServlet extends HttpServlet {
                         rs.getString("phone"),
                         rs.getString("address")
                 );
-                // Set the Customer object as a request attribute
                 request.setAttribute("customer", customer);
 
                 // Forward to JSP
@@ -75,7 +73,7 @@ public class EditCustomerServlet extends HttpServlet {
             HttpSession session = request.getSession(false);
             if (session != null && session.getAttribute("user") != null) {
                 User currentUser = (User) session.getAttribute("user");
-                int staffId = currentUser.getId(); // adjust based on your User class
+                int staffId = currentUser.getId();
 
                 AuditLogDAO auditLogDAO = new AuditLogDAO();
                 auditLogDAO.logAction(staffId, "Update Customer", "Staff updated customer with ID: " + id);
