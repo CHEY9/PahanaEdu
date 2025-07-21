@@ -45,7 +45,7 @@
     </div>
 
     <div class="p-4 bill-info">
-        <p><strong>Customer:</strong> <span class="text-primary">${customer.name}</span></p>
+        <p><strong>Customer:</strong> <span class="text-primary">${customerName}</span></p>
         <p><strong>Bill Date & Time:</strong> <span class="text-secondary">${billDateTime}</span></p>
         <p><strong>Staff:</strong> <span class="text-secondary">${staffUsername}</span></p>
     </div>
@@ -74,15 +74,18 @@
         </tr>
         </tbody>
     </table>
-
     <div class="p-4 text-center">
+        <a href="${pageContext.request.contextPath}/Staff/dashboard.jsp" class="btn btn-secondary btn-lg me-2">
+            <i class="bi bi-arrow-left-circle"></i> Back to Dashboard
+        </a>
+    </div>
+        <div class="p-4 text-center">
         <a href="${pageContext.request.contextPath}/Staff/create-bill-form" class="btn btn-primary btn-lg">
             <i class="bi bi-plus-circle"></i> Create New Bill
         </a>
     </div>
 
 </div>
-
 <!-- Bootstrap Icons (optional) -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" />
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
