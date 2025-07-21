@@ -9,18 +9,18 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@WebServlet("/staff/bill-details")
-public class BillDetailsServlet extends HttpServlet {
+@WebServlet("/staff/edit-bill-form")
+public class EditBillFormServlet extends HttpServlet {
 
     private static final String DB_URL = "jdbc:sqlserver://localhost:1433;databaseName=PahanaEdu;encrypt=true;trustServerCertificate=true";
     private static final String DB_USER = "sa";
     private static final String DB_PASS = "12345";
 
     public static class BillItem {
-        public String itemName;
-        public int quantity;
-        public double unitPrice;
-        public double totalPrice;
+        private String itemName;
+        private int quantity;
+        private double unitPrice;
+        private double totalPrice;
 
         public BillItem(String itemName, int quantity, double unitPrice, double totalPrice) {
             this.itemName = itemName;
@@ -28,21 +28,11 @@ public class BillDetailsServlet extends HttpServlet {
             this.unitPrice = unitPrice;
             this.totalPrice = totalPrice;
         }
-        public String getItemName() {
-            return itemName;
-        }
 
-        public int getQuantity() {
-            return quantity;
-        }
-
-        public double getUnitPrice() {
-            return unitPrice;
-        }
-
-        public double getTotalPrice() {
-            return totalPrice;
-        }
+        public String getItemName() { return itemName; }
+        public int getQuantity() { return quantity; }
+        public double getUnitPrice() { return unitPrice; }
+        public double getTotalPrice() { return totalPrice; }
     }
 
     @Override
@@ -67,13 +57,10 @@ public class BillDetailsServlet extends HttpServlet {
         String billDateTime = "";
         double totalAmount = 0;
 
-        String staffUsername = (String) request.getSession().getAttribute("username");
-        if (staffUsername == null) staffUsername = "Unknown Staff";
-
         List<BillItem> billItems = new ArrayList<>();
 
         try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS)) {
-            // Get bill and customer info
+            // Load bill info
             String billSql = "SELECT b.bill_date_time, b.totalAmount, c.name AS customerName FROM bills b JOIN customers c ON b.Id = c.id WHERE b.bill_id = ?";
             PreparedStatement ps = conn.prepareStatement(billSql);
             ps.setInt(1, billId);
@@ -90,7 +77,7 @@ public class BillDetailsServlet extends HttpServlet {
             rs.close();
             ps.close();
 
-            // Get bill items
+            // Load bill items
             String itemsSql = "SELECT i.itemName, bi.quantity, bi.unit_Price, bi.total_Price FROM bill_items bi JOIN items i ON bi.item_Id = i.itemId WHERE bi.bill_Id = ?";
             PreparedStatement psItems = conn.prepareStatement(itemsSql);
             psItems.setInt(1, billId);
@@ -113,13 +100,13 @@ public class BillDetailsServlet extends HttpServlet {
             return;
         }
 
+        request.setAttribute("billId", billId);
         request.setAttribute("customerName", customerName);
         request.setAttribute("billDateTime", billDateTime);
         request.setAttribute("totalAmount", totalAmount);
-        request.setAttribute("staffUsername", staffUsername);
         request.setAttribute("billItems", billItems);
 
-        // Forward to JSP to display bill details
-        request.getRequestDispatcher("/Staff/bill-details.jsp").forward(request, response);
+        // Forward to JSP
+        request.getRequestDispatcher("/Staff/edit-bill-form.jsp").forward(request, response);
     }
 }

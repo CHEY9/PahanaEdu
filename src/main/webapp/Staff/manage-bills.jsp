@@ -64,7 +64,7 @@
             <td><fmt:formatDate value="${bill.billDateTime}" pattern="yyyy-MM-dd HH:mm:ss" /></td>
             <td>${bill.totalAmount}</td>
             <td>
-              <a href="bill-details?billId=${bill.billId}" class="btn btn-info btn-sm" title="View">View</a>
+              <a href="${pageContext.request.contextPath}/staff/bill-details?billId=${bill.billId}" class="btn btn-sm btn-info">View</a>
               <a href="edit-bill-form?billId=${bill.billId}" class="btn btn-warning btn-sm" title="Edit">Edit</a>
               <form action="delete-bill" method="post" style="display:inline" onsubmit="return confirm('Are you sure to delete this bill?');">
                 <input type="hidden" name="billId" value="${bill.billId}" />
