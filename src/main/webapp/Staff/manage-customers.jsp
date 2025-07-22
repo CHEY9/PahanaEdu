@@ -22,7 +22,7 @@
 <div class="container mt-5">
     <h2 class="mb-4">Manage Customers (Staff)</h2>
 
-    <!-- 🔍 Search Form -->
+    <!--  Search Form -->
     <form method="get" action="manage-customers" class="row g-3 mb-4">
         <div class="col-md-4">
             <input type="text" name="searchName" class="form-control" placeholder="Search by name"
