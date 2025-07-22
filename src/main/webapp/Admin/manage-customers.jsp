@@ -22,13 +22,15 @@
 <body>
 <div class="container mt-5">
     <h2>Manage Customers</h2>
-    <!-- 🔍 Search Form -->
+    <!-- Search Form -->
     <form method="get" action="manage-customers" class="row g-3 mb-4">
         <div class="col-md-4">
-            <input type="text" name="searchName" class="form-control" placeholder="Search by name" value="${param.searchName}">
+            <input type="text" name="searchName" class="form-control" placeholder="Search by name"
+                   value="<%= request.getParameter("searchName") != null ? request.getParameter("searchName") : "" %>">
         </div>
         <div class="col-md-4">
-            <input type="text" name="searchPhone" class="form-control" placeholder="Search by phone" value="${param.searchPhone}">
+            <input type="text" name="searchPhone" class="form-control" placeholder="Search by phone"
+                   value="<%= request.getParameter("searchPhone") != null ? request.getParameter("searchPhone") : "" %>">
         </div>
         <div class="col-md-2">
             <button type="submit" class="btn btn-primary">Search</button>
