@@ -160,7 +160,7 @@
 
     <section>
         <h2>5. Getting Further Help</h2>
-        <p>If you encounter any issues or need assistance, please contact the support team via email at <a href="mailto:support@pahanaedu.com">support@pahanaedu.com</a> or call <strong>+94 71 412 1417</strong>.</p>
+        <p>If you have any issues or need assistance, please contact the support team via email at <a href="mailto:support@pahanaedu.com">support@pahanaedu.com</a> or call <strong>+94 71 412 1417</strong>.</p>
     </section>
 
     <a href="<%= request.getContextPath() %>/Staff/staff-dashboard.jsp" class="btn btn-outline-primary btn-back">
