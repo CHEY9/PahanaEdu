@@ -42,7 +42,7 @@ public class Bill {
         this.Id = Id;
     }
 
-    public int getitemId() {
+    public int getItemId() {
         return itemId;
     }
 

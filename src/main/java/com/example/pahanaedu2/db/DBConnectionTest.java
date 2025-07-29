@@ -23,5 +23,4 @@ public class DBConnectionTest {
             e.printStackTrace();
         }
     }
-
 }
