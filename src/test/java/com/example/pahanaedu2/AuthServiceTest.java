@@ -21,7 +21,6 @@ class AuthServiceTest {
         authService = new AuthService();
         testUser = new User("authuser", "authpass", "auth@example.com", "0987654321", "Admin");
 
-        // Register the test user before running tests
         boolean registered = authService.registerUser(testUser);
         System.out.println("User registered: " + registered);
     }

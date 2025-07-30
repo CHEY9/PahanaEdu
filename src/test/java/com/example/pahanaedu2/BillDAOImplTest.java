@@ -3,6 +3,8 @@ package com.example.pahanaedu2;
 import com.example.pahanaedu2.bill.Bill;
 import com.example.pahanaedu2.bill.BillDAOImpl;
 import org.junit.jupiter.api.*;
+
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -36,5 +38,26 @@ class BillDAOImplTest {
         Bill bill = billDAO.getBillById(existingBillId);
         assertNotNull(bill, "Bill with ID " + existingBillId + " should exist.");
         assertEquals(existingBillId, bill.getBillId());
+    }
+    @Test
+    void testGetBillsByCustomerId() {
+        int testCustomerId = 1;
+        List<Bill> bills = billDAO.getBillsByCustomerId(testCustomerId);
+        assertNotNull(bills);
+        for (Bill bill : bills) {
+            assertEquals(testCustomerId, bill.getId());
+        }
+    }
+
+    @Test
+    void testGetBillsByDateRange() {
+        LocalDateTime from = LocalDateTime.of(2025, 1, 1, 0, 0);
+        LocalDateTime to = LocalDateTime.now();
+        List<Bill> bills = billDAO.getBillsByDateRange(from, to);
+        assertNotNull(bills);
+        for (Bill bill : bills) {
+            assertTrue(!bill.getBillDateTime().isBefore(from));
+            assertTrue(!bill.getBillDateTime().isAfter(to));
+        }
     }
 }

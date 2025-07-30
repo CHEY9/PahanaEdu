@@ -4,7 +4,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ItemDAOImpl implements SimpleItemDAO {
+public class ItemDAOImpl {
     private String jdbcURL = "jdbc:sqlserver://localhost:1433;databaseName=PahanaEdu;encrypt=true;trustServerCertificate=true";
     private String jdbcUsername = "sa";
     private String jdbcPassword = "12345";
@@ -20,7 +20,6 @@ public class ItemDAOImpl implements SimpleItemDAO {
         return DriverManager.getConnection(jdbcURL, jdbcUsername, jdbcPassword);
     }
 
-    @Override
     public void insertItem(Item item) throws SQLException {
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(INSERT_ITEM_SQL)) {
@@ -33,7 +32,6 @@ public class ItemDAOImpl implements SimpleItemDAO {
         }
     }
 
-    @Override
     public Item selectItem(int itemId) throws SQLException {
         Item item = null;
         try (Connection connection = getConnection();
@@ -41,43 +39,25 @@ public class ItemDAOImpl implements SimpleItemDAO {
             preparedStatement.setInt(1, itemId);
             ResultSet rs = preparedStatement.executeQuery();
             if (rs.next()) {
-                item = new Item(
-                        rs.getInt("itemId"),
-                        rs.getString("ItemName"),
-                        rs.getString("category"),
-                        rs.getString("description"),
-                        rs.getDouble("price"),
-                        rs.getInt("stockQuantity")
-                );
+                item = mapResultSetToItem(rs);
             }
         }
         return item;
     }
 
-    @Override
     public List<Item> selectAllItems() throws SQLException {
         List<Item> items = new ArrayList<>();
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_ITEMS)) {
             ResultSet rs = preparedStatement.executeQuery();
             while (rs.next()) {
-                Item item = new Item(
-                        rs.getInt("itemId"),
-                        rs.getString("ItemName"),
-                        rs.getString("category"),
-                        rs.getString("description"),
-                        rs.getDouble("price"),
-                        rs.getInt("stockQuantity")
-                );
-                items.add(item);
+                items.add(mapResultSetToItem(rs));
             }
         }
         return items;
     }
 
-    @Override
     public boolean updateItem(Item item) throws SQLException {
-        boolean rowUpdated;
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_ITEM_SQL)) {
             preparedStatement.setString(1, item.getItemName());
@@ -86,24 +66,129 @@ public class ItemDAOImpl implements SimpleItemDAO {
             preparedStatement.setDouble(4, item.getPrice());
             preparedStatement.setInt(5, item.getStockQuantity());
             preparedStatement.setInt(6, item.getItemId());
-
-            rowUpdated = preparedStatement.executeUpdate() > 0;
+            return preparedStatement.executeUpdate() > 0;
         }
-        return rowUpdated;
     }
 
-    @Override
     public boolean deleteItem(int itemId) throws SQLException {
-        boolean rowDeleted;
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(DELETE_ITEM_SQL)) {
             preparedStatement.setInt(1, itemId);
-            rowDeleted = preparedStatement.executeUpdate() > 0;
+            return preparedStatement.executeUpdate() > 0;
         }
-        return rowDeleted;
     }
 
-    @Override
+    public List<Item> getItemsByCategory(String category) throws SQLException {
+        List<Item> items = new ArrayList<>();
+        String sql = "SELECT * FROM Items WHERE category = ?";
+        try (Connection connection = getConnection();
+             PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, category);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                items.add(mapResultSetToItem(rs));
+            }
+        }
+        return items;
+    }
+
+    public List<Item> getItemsByName(String name) throws SQLException {
+        List<Item> items = new ArrayList<>();
+        String sql = "SELECT * FROM Items WHERE ItemName LIKE ?";
+        try (Connection connection = getConnection();
+             PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, "%" + name + "%");
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                items.add(mapResultSetToItem(rs));
+            }
+        }
+        return items;
+    }
+
+    public List<Item> getItemsByMinPrice(double minPrice) throws SQLException {
+        List<Item> items = new ArrayList<>();
+        String sql = "SELECT * FROM Items WHERE price >= ?";
+        try (Connection connection = getConnection();
+             PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setDouble(1, minPrice);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                items.add(mapResultSetToItem(rs));
+            }
+        }
+        return items;
+    }
+
+    public List<Item> getItemsByMaxPrice(double maxPrice) throws SQLException {
+        List<Item> items = new ArrayList<>();
+        String sql = "SELECT * FROM Items WHERE price <= ?";
+        try (Connection connection = getConnection();
+             PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setDouble(1, maxPrice);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                items.add(mapResultSetToItem(rs));
+            }
+        }
+        return items;
+    }
+
+    public List<Item> getItemsByStockLessThan(int quantity) throws SQLException {
+        List<Item> items = new ArrayList<>();
+        String sql = "SELECT * FROM Items WHERE stockQuantity < ?";
+        try (Connection connection = getConnection();
+             PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, quantity);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                items.add(mapResultSetToItem(rs));
+            }
+        }
+        return items;
+    }
+
+    public List<Item> getItemsByPriceRange(double min, double max) throws SQLException {
+        List<Item> items = new ArrayList<>();
+        String sql = "SELECT * FROM Items WHERE price BETWEEN ? AND ?";
+        try (Connection connection = getConnection();
+             PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setDouble(1, min);
+            ps.setDouble(2, max);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                items.add(mapResultSetToItem(rs));
+            }
+        }
+        return items;
+    }
+
+    public List<Item> getItemsSortedByPrice(boolean ascending) throws SQLException {
+        List<Item> items = new ArrayList<>();
+        String sql = "SELECT * FROM Items ORDER BY price " + (ascending ? "ASC" : "DESC");
+        try (Connection connection = getConnection();
+             PreparedStatement ps = connection.prepareStatement(sql)) {
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                items.add(mapResultSetToItem(rs));
+            }
+        }
+        return items;
+    }
+
+    public List<Item> getItemsSortedByStock(boolean ascending) throws SQLException {
+        List<Item> items = new ArrayList<>();
+        String sql = "SELECT * FROM Items ORDER BY stockQuantity " + (ascending ? "ASC" : "DESC");
+        try (Connection connection = getConnection();
+             PreparedStatement ps = connection.prepareStatement(sql)) {
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                items.add(mapResultSetToItem(rs));
+            }
+        }
+        return items;
+    }
+
     public List<Item> searchItems(String keyword) throws SQLException {
         List<Item> items = new ArrayList<>();
         try (Connection connection = getConnection();
@@ -113,17 +198,20 @@ public class ItemDAOImpl implements SimpleItemDAO {
             preparedStatement.setString(2, searchTerm);
             ResultSet rs = preparedStatement.executeQuery();
             while (rs.next()) {
-                Item item = new Item(
-                        rs.getInt("itemId"),
-                        rs.getString("ItemName"),
-                        rs.getString("category"),
-                        rs.getString("description"),
-                        rs.getDouble("price"),
-                        rs.getInt("stockQuantity")
-                );
-                items.add(item);
+                items.add(mapResultSetToItem(rs));
             }
         }
         return items;
+    }
+
+    private Item mapResultSetToItem(ResultSet rs) throws SQLException {
+        return new Item(
+                rs.getInt("itemId"),
+                rs.getString("ItemName"),
+                rs.getString("category"),
+                rs.getString("description"),
+                rs.getDouble("price"),
+                rs.getInt("stockQuantity")
+        );
     }
 }
