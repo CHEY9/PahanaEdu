@@ -11,10 +11,13 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import com.example.pahanaedu2.util.EmailService;
+
 
 @WebServlet("/Staff/create-bill")
 public class CreateBillServlet extends HttpServlet {
 
+    private static final int LOW_STOCK_THRESHOLD = 10;
     private static final String DB_URL = "jdbc:sqlserver://localhost:1433;databaseName=PahanaEdu;encrypt=true;trustServerCertificate=true";
     private static final String DB_USER = "sa";
     private static final String DB_PASS = "12345";
@@ -140,6 +143,27 @@ public class CreateBillServlet extends HttpServlet {
                     double unitPrice = unitPrices[i];
                     double totalPrice = unitPrice * qty;
                     int newStockQty = stockQuantities[i] - qty;
+
+                    if (newStockQty < LOW_STOCK_THRESHOLD) {
+                        String itemName = ""; // Default in case name fetch fails
+                        try (PreparedStatement itemNameStmt = conn.prepareStatement("SELECT ItemName FROM items WHERE itemId = ?")) {
+                            itemNameStmt.setInt(1, itemId);
+                            try (ResultSet itemRs = itemNameStmt.executeQuery()) {
+                                if (itemRs.next()) {
+                                    itemName = itemRs.getString("ItemName");
+                                }
+                            }
+                        }
+
+                        // Send low stock alert
+
+                        String timestamp = java.time.LocalDateTime.now().format(
+                                java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+                        );
+
+                        EmailService.sendLowStockAlert(itemName, newStockQty, timestamp);
+
+                    }
 
                     billItemStmt.setInt(1, billId);
                     billItemStmt.setInt(2, itemId);
