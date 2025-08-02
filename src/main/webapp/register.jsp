@@ -41,6 +41,28 @@
         input[type="submit"]:hover {
             background: #4cae4c;
         }
+        .back-button {
+            display: block;
+            width: 100%;
+            margin-top: 12px;
+            padding: 12px;
+            background: #ddd;
+            color: #333;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 16px;
+            font-weight: bold;
+            transition: background 0.3s ease;
+        }
+        .back-button:hover {
+            background: #ccc;
+            color: #000;
+        }
+        input[type="submit"], .back-button {
+            box-sizing: border-box;
+        }
+
     </style>
     <script>
         function validateForm() {
@@ -126,6 +148,7 @@
 
         <input type="submit" value="Register">
     </form>
+    <a href="${pageContext.request.contextPath}/login.jsp" class="back-button">⬅ Back to Login</a>
 </div>
 </body>
 </html>
