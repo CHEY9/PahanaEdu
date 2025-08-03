@@ -1,3 +1,4 @@
+
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
@@ -18,7 +19,7 @@
     </div>
 
     <form action="${pageContext.request.contextPath}/Staff/create-bill" method="post">
-        <!-- Customer dropdown -->
+
         <div class="mb-3">
             <label for="customerId" class="form-label">Select Customer</label>
             <select id="customerId" name="customerId" class="form-select" required>
@@ -28,6 +29,13 @@
                 </c:forEach>
             </select>
         </div>
+
+        <c:if test="${not empty errorMessage}">
+            <div class="alert alert-warning" role="alert">
+                    ${errorMessage}
+            </div>
+        </c:if>
+
 
         <!-- Items Table -->
         <table class="table table-bordered table-striped">
@@ -43,18 +51,18 @@
             <tbody>
             <c:forEach var="item" items="${items}">
                 <tr>
-                    <td>${item.name}</td>
+                    <td>${item.itemName}</td>
                     <td>${item.category}</td>
                     <td>${item.price}</td>
-                    <td>${item.stock}</td>
+                    <td>${item.stockQuantity}</td>
                     <td>
                         <input type="number"
                                name="quantities"
                                min="0"
-                               max="${item.stock}"
-                               value="0"
-                               class="form-control" />
-                        <input type="hidden" name="itemIds" value="${item.id}" />
+                               max="${item.stockQuantity}"
+                        value="0"
+                        class="form-control" />
+                        <input type="hidden" name="itemIds" value="${item.itemId}" />
                         <input type="hidden" name="prices" value="${item.price}" />
                     </td>
                 </tr>

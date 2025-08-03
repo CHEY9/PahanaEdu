@@ -15,7 +15,7 @@ public class EmailService {
         String subject = "🔔 Low Stock Alert: " + itemName;
 
         String body = """
-        Dear Inventory Manager,
+        Dear Admin,
 
         This is an automated alert from the PahanaEdu inventory system.
 

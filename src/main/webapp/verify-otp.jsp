@@ -15,6 +15,13 @@
     </div>
 
     <button type="submit" class="btn btn-primary w-100">Verify OTP</button>
+
+    <% String errorMessage = (String) request.getAttribute("errorMessage"); %>
+    <% if (errorMessage != null) { %>
+    <div class="alert alert-danger" role="alert">
+      <%= errorMessage %>
+    </div>
+    <% } %>
   </form>
 
   <p class="mt-3 text-center">
