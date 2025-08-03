@@ -1,6 +1,7 @@
 package com.example.pahanaedu2.bill;
 
 import com.example.pahanaedu2.customer.Customer;
+import com.example.pahanaedu2.item.Item;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
@@ -23,6 +24,48 @@ public class CreateBillServlet extends HttpServlet {
     private static final String DB_PASS = "12345";
 
     @Override
+
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS)) {
+            List<Customer> customers = new ArrayList<>();
+            List<Item> items = new ArrayList<>();
+
+            // Load customers
+            try (PreparedStatement custStmt = conn.prepareStatement("SELECT id, name FROM customers");
+                 ResultSet custRs = custStmt.executeQuery()) {
+                while (custRs.next()) {
+                    Customer cust = new Customer();
+                    cust.setId(custRs.getInt("id"));
+                    cust.setName(custRs.getString("name"));
+                    customers.add(cust);
+                }
+            }
+
+            // Load items
+            try (PreparedStatement itemStmt = conn.prepareStatement("SELECT itemId, itemName, category, price, stockQuantity FROM items");
+                 ResultSet itemRs = itemStmt.executeQuery()) {
+                while (itemRs.next()) {
+                    Item item = new Item();
+                    item.setItemId(itemRs.getInt("itemId"));
+                    item.setItemName(itemRs.getString("itemName"));
+                    item.setCategory(itemRs.getString("category"));
+                    item.setPrice(itemRs.getDouble("price"));
+                    item.setStockQuantity(itemRs.getInt("stockQuantity"));
+                    items.add(item);
+                }
+            }
+
+            request.setAttribute("customers", customers);
+            request.setAttribute("items", items);
+
+            request.getRequestDispatcher("/Staff/create-bill.jsp").forward(request, response);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Database error while loading form data.");
+        }
+    }
+
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
@@ -58,9 +101,55 @@ public class CreateBillServlet extends HttpServlet {
         }
 
         if (filteredItemIds.isEmpty()) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "No items selected to purchase.");
-            return;
+            // Set error message
+            request.setAttribute("errorMessage", "Please select at least one item to generate the bill.");
+
+            // Reload customers and items to show in the form again
+            try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS)) {
+                List<Customer> customers = new ArrayList<>();
+                List<Item> items = new ArrayList<>();
+
+                // Load customers
+                PreparedStatement custStmt = conn.prepareStatement("SELECT id, name FROM customers");
+                ResultSet custRs = custStmt.executeQuery();
+                while (custRs.next()) {
+                    Customer cust = new Customer();
+                    cust.setId(custRs.getInt("id"));
+                    cust.setName(custRs.getString("name"));
+                    customers.add(cust);
+                }
+                custRs.close();
+                custStmt.close();
+
+                // Load items
+                PreparedStatement itemStmt = conn.prepareStatement("SELECT itemId, itemName, category, price, stockQuantity FROM items");
+                ResultSet itemRs = itemStmt.executeQuery();
+                while (itemRs.next()) {
+                    Item item = new Item();
+                    item.setItemId(itemRs.getInt("itemId"));
+                    item.setItemName(itemRs.getString("itemName"));
+                    item.setCategory(itemRs.getString("category"));
+                    item.setPrice(itemRs.getDouble("price"));
+                    item.setStockQuantity(itemRs.getInt("stockQuantity"));
+                    items.add(item);
+                }
+                itemRs.close();
+                itemStmt.close();
+
+                // Set as request attributes
+                request.setAttribute("customers", customers);
+                request.setAttribute("items", items);
+
+                // Forward back to form
+                request.getRequestDispatcher("/Staff/create-bill.jsp").forward(request, response);
+                return;
+            } catch (SQLException e) {
+                e.printStackTrace();
+                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Database error while loading form data.");
+                return;
+            }
         }
+
 
         try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS)) {
             conn.setAutoCommit(false);

@@ -77,7 +77,7 @@
   </form>
 
   <p class="mt-4 text-center">
-    <a href="login.jsp" class="back-link">Back to Login</a>
+    <a href="login.jsp" class="back-link">Back to Log in</a>
   </p>
 </div>
 
