@@ -10,6 +10,11 @@ public class DBConnection {
     private static final String PASSWORD = "12345";
 
 
+    private static Connection connection;
+
+    private DBConnection() {
+    }
+
     public static Connection getConnection() throws SQLException {
         try {
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");

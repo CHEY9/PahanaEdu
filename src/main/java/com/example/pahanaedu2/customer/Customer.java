@@ -1,5 +1,8 @@
 package com.example.pahanaedu2.customer;
-
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+import com.example.pahanaedu2.db.DBConnection;
 public class Customer {
     private int id;
     private String name;
@@ -58,4 +61,29 @@ public class Customer {
     public void setAddress(String address) {
         this.address = address;
     }
+
+    public static List<Customer> getAllCustomers() {
+        List<Customer> customers = new ArrayList<>();
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement("SELECT * FROM customers");
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                Customer customer = new Customer();
+                customer.setId(rs.getInt("id"));
+                customer.setName(rs.getString("name"));
+                customer.setEmail(rs.getString("email"));
+                customer.setPhone(rs.getString("phone"));
+                customer.setAddress(rs.getString("address"));
+                customers.add(customer);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return customers;
+    }
+
 }

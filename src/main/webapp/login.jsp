@@ -21,7 +21,7 @@
                 left: 0;
                 height: 100%;
                 width: 100%;
-                background-color: rgba(0, 0, 0, 0.7); /* faded white overlay */
+                background-color: rgba(0, 0, 0, 0.7);
                 z-index: -1;
             }
 
@@ -33,10 +33,10 @@
                 margin: 100px auto;
                 padding: 30px;
                 border-radius: 15px;
-                background: rgba(255, 255, 255, 0.6); /* Light transparent glass */
+                background: rgba(255, 255, 255, 0.6);
                 box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
-                backdrop-filter: blur(12px); /* Frosted glass effect */
-                -webkit-backdrop-filter: blur(12px); /* Safari support */
+                backdrop-filter: blur(12px);
+                -webkit-backdrop-filter: blur(12px);
                 border: 1px solid rgba(255, 255, 255, 0.3);
             }
 
@@ -112,7 +112,22 @@
         <%
             }
         %>
+        <%
+            String resetParam = request.getParameter("reset");
+            if ("1".equals(resetParam)) {
+        %>
+        <div class="alert alert-success mt-3" role="alert">
+            Password reset successful! You can now log in.
+        </div>
+        <%
+            }
+        %>
+
     </form>
+
+    <p class="mt-2 text-center">
+        <a href="forgot-password.jsp">Forgot Password?</a>
+    </p>
 
     <p class="mt-3 text-center">
         Don't have an account? <a href="register.jsp">Register</a>
@@ -121,20 +136,32 @@
 
 <script>
     document.querySelector("form").addEventListener("submit", function (e) {
-        const username = document.querySelector("input[name='username']").value.trim();
-        const password = document.querySelector("input[name='password']").value;
+        const usernameInput = document.querySelector("input[name='username']");
+        const passwordInput = document.querySelector("input[name='password']");
+        const username = usernameInput.value.trim();
+        const password = passwordInput.value;
 
-        if (username.length < 4 || !/^[a-zA-Z0-9._-]+$/.test(username)) {
-            alert("Username must be 4–10 characters and contain only letters, numbers, '.', '-', '_'.");
+        // is the fields are empty?
+        if (!username || !password) {
+            alert("Please fill in both username and password.");
             e.preventDefault();
             return;
         }
 
+        // Username length and character validation
+        if (username.length < 4 || username.length > 10 || !/^[a-zA-Z0-9._-]+$/.test(username)) {
+            alert("Username must be 4–10 characters and contain only letters, numbers, '.', '-', or '_'.");
+            e.preventDefault();
+            return;
+        }
+
+        // Password length and no-space validation
         if (password.length < 5 || password.includes(" ")) {
             alert("Password must be at least 5 characters long and cannot contain spaces.");
             e.preventDefault();
         }
     });
 </script>
+
 </body>
 </html>

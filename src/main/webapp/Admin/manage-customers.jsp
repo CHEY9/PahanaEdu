@@ -1,9 +1,18 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="java.util.List" %>
 <%@ page import="com.example.pahanaedu2.customer.Customer" %>
+<%@ page import="com.example.pahanaedu2.auth.User" %>
 <%
     List<Customer> customers = (List<Customer>) request.getAttribute("customerList");
 %>
+<%
+    User user = (User) session.getAttribute("user");
+    if (user == null || !"admin".equalsIgnoreCase(user.getRole())) {
+        response.sendRedirect("../login.jsp");
+        return;
+    }
+%>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -13,13 +22,15 @@
 <body>
 <div class="container mt-5">
     <h2>Manage Customers</h2>
-    <!-- 🔍 Search Form -->
+    <!-- Search Form -->
     <form method="get" action="manage-customers" class="row g-3 mb-4">
         <div class="col-md-4">
-            <input type="text" name="searchName" class="form-control" placeholder="Search by name" value="${param.searchName}">
+            <input type="text" name="searchName" class="form-control" placeholder="Search by name"
+                   value="<%= request.getParameter("searchName") != null ? request.getParameter("searchName") : "" %>">
         </div>
         <div class="col-md-4">
-            <input type="text" name="searchPhone" class="form-control" placeholder="Search by phone" value="${param.searchPhone}">
+            <input type="text" name="searchPhone" class="form-control" placeholder="Search by phone"
+                   value="<%= request.getParameter("searchPhone") != null ? request.getParameter("searchPhone") : "" %>">
         </div>
         <div class="col-md-2">
             <button type="submit" class="btn btn-primary">Search</button>
@@ -61,7 +72,7 @@
         <% } %>
         </tbody>
     </table>
-    <a href="dashboard.jsp" class="btn btn-secondary mt-3">Back to Dashboard</a>
+    <a href="dashboard.jsp" class="btn btn-secondary mt-3">⬅ Back to Dashboard</a>
 </div>
 </body>
 </html>

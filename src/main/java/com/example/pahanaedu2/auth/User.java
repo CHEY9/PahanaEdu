@@ -7,12 +7,11 @@ public class User {
     private String email;
     private String phone;
     private String role;
+    private String profilePicturePath;
 
-    // No-argument constructor
     public User() {
     }
 
-    // All-arguments constructor
     public User(String username, String password, String email, String phone, String role) {
         this.username = username;
         this.password = password;
@@ -58,4 +57,11 @@ public class User {
     public void setRole(String role) {
         this.role = role;
     }
+    public String getProfilePicturePath() {
+        return profilePicturePath;
+    }
+    public void setProfilePicturePath(String profilePicturePath) {
+        this.profilePicturePath = profilePicturePath;
+    }
+
 }

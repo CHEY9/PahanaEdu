@@ -6,7 +6,7 @@ import jakarta.servlet.http.*;
 
 import java.io.IOException;
 
-@WebServlet("/logout")  //  This maps the servlet to /logout
+@WebServlet("/logout")
 public class LogoutServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
