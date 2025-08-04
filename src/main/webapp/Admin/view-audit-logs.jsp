@@ -1,61 +1,97 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Audit Logs</title>
-    <!-- Bootstrap CSS CDN -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <title>Audit Logs - Admin Dashboard</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
     <style>
         body {
-            background-color: #f4f6f9;
+            background-color: #f8f9fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
+
         .container {
-            margin-top: 50px;
+            margin-top: 60px;
+            max-width: 95%;
         }
+
+        .card {
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border: none;
+        }
+
+        .card-header {
+            background-color: #0d6efd;
+            color: white;
+            padding: 20px;
+            border-top-left-radius: 12px;
+            border-top-right-radius: 12px;
+        }
+
+        .card-header h3 {
+            margin: 0;
+            font-weight: 600;
+        }
+
         .table thead {
             background-color: #343a40;
             color: white;
         }
+
         .table tbody tr:hover {
-            background-color: #f1f1f1;
+            background-color: #f0f0f0;
         }
-        h2 {
-            margin-bottom: 30px;
-            color: #333;
-            font-weight: 600;
+
+        .btn-back {
+            margin-top: 20px;
+        }
+
+        .table-responsive {
+            max-height: 500px;
+            overflow-y: auto;
         }
     </style>
 </head>
 <body>
 <div class="container">
-    <h2 class="text-center">Audit Logs</h2>
-    <div class="table-responsive">
-        <table class="table table-bordered table-striped">
-            <thead>
-            <tr>
-                <th>Log ID</th>
-                <th>User Name</th>
-                <th>Action</th>
-                <th>Description</th>
-                <th>Timestamp</th>
-            </tr>
-            </thead>
-            <tbody>
-            <c:forEach var="log" items="${logList}">
+    <div class="card">
+        <div class="card-header text-center">
+            <h3>Audit Logs</h3>
+        </div>
+        <div class="card-body table-responsive">
+            <table class="table table-bordered table-striped align-middle text-center">
+                <thead>
                 <tr>
-                    <td>${log.logId}</td>
-                    <td>${log.username}</td>
-                    <td>${log.action}</td>
-                    <td>${log.description}</td>
-                    <td>${log.timestamp}</td>
+                    <th>Log ID</th>
+                    <th>User Name</th>
+                    <th>Action</th>
+                    <th>Description</th>
+                    <th>Timestamp</th>
                 </tr>
-            </c:forEach>
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                <c:forEach var="log" items="${logList}">
+                    <tr>
+                        <td>${log.logId}</td>
+                        <td>${log.username}</td>
+                        <td><span class="badge bg-info">${log.action}</span></td>
+                        <td>${log.description}</td>
+                        <td>${log.timestamp}</td>
+                    </tr>
+                </c:forEach>
+                </tbody>
+            </table>
+        </div>
     </div>
-    <a href="dashboard.jsp" class="btn btn-secondary mt-3">Back to Dashboard</a>
+    <div class="text-center">
+        <a href="dashboard.jsp" class="btn btn-outline-primary btn-back">Back to Dashboard</a>
+    </div>
 </div>
 </body>
 </html>
