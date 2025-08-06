@@ -1,4 +1,4 @@
-<%@ page import="java.util.*, com.example.pahanaedu2.model.BillItem" %>
+<%@ page import="java.util.*, com.example.pahanaedu2.bill.BillItem" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
   int billId = (int) request.getAttribute("billId");
