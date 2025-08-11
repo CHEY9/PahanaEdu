@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 public class AuditLog {
     private int logId;
     private int userId;
-    private String username;     // moved to the top
+    private String username;
     private String action;
     private String description;
     private LocalDateTime timestamp;
